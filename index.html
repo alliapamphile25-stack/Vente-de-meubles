@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MaisonElite Abidjan — Vente de meubles de qualité : fauteuils, lits, tapis, matelas, rideaux, meubles TV. Services de tapisserie et menuiserie sur mesure à Abidjan, Côte d'Ivoire." />
+  <meta name="keywords" content="meubles Abidjan, fauteuils Côte d'Ivoire, lits, tapis, matelas, rideaux, tapisserie, menuiserie, décoration intérieure Abidjan" />
+  <meta name="author" content="MaisonElite" />
+  <meta property="og:title" content="MaisonElite — Meubles de qualité à Abidjan" />
+  <meta property="og:description" content="Fauteuils, lits, tapis, matelas, rideaux et services sur mesure. Livraison rapide à Abidjan, Côte d'Ivoire." />
+  <meta property="og:type" content="website" />
+  <title>MaisonElite — Meubles & Décoration | Abidjan, Côte d'Ivoire</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <style>
+    /* ===================== RESET & BASE ===================== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --gold:       #B8965A;
+      --gold-lt:    #D4B07A;
+      --gold-pale:  #F5EBD8;
+      --dark:       #1A1612;
+      --dark-2:     #2C2520;
+      --cream:      #FAF7F2;
+      --cream-2:    #F0EAE0;
+      --white:      #FFFFFF;
+      --text:       #3D3530;
+      --muted:      #7A6E68;
+      --border:     #E2D8CE;
+      --wa:         #25D366;
+      --wa-dk:      #1aab52;
+      --radius:     6px;
+      --radius-lg:  12px;
+      --shadow-sm:  0 2px 12px rgba(0,0,0,.07);
+      --shadow-md:  0 6px 28px rgba(0,0,0,.10);
+      --shadow-lg:  0 16px 56px rgba(0,0,0,.14);
+    }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; line-height: 1.6; }
+    img { display: block; width: 100%; object-fit: cover; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ===================== SCROLLBAR ===================== */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+    /* ===================== TYPOGRAPHY HELPERS ===================== */
+    .section-label {
+      font-size: .72rem; font-weight: 600; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: .6rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.75rem, 3.5vw, 2.6rem);
+      font-weight: 700; color: var(--dark); line-height: 1.18; margin-bottom: .875rem;
+    }
+    .section-subtitle {
+      color: var(--muted); font-size: .975rem; line-height: 1.75; max-width: 540px;
+    }
+    .section-header { margin-bottom: 3rem; }
+    .section-header.center { text-align: center; }
+    .section-header.center .section-subtitle { margin: 0 auto; }
+
+    /* ===================== BUTTONS ===================== */
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .825rem 1.75rem; border-radius: var(--radius);
+      font-weight: 600; font-size: .9rem; letter-spacing: .02em;
+      transition: all .22s; cursor: pointer; border: none;
+    }
+    .btn-gold { background: var(--gold); color: #fff; }
+    .btn-gold:hover { background: var(--gold-lt); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(184,150,90,.35); }
+    .btn-outline { background: transparent; color: var(--dark); border: 1.5px solid var(--border); }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-wa {
+      background: var(--wa); color: #fff;
+      box-shadow: 0 4px 18px rgba(37,211,102,.28);
+    }
+    .btn-wa:hover { background: var(--wa-dk); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,.38); }
+    .btn-wa-outline {
+      background: transparent; color: var(--wa);
+      border: 1.5px solid var(--wa);
+    }
+    .btn-wa-outline:hover { background: var(--wa); color: #fff; }
+
+    /* ===================== LAYOUT ===================== */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+    section { padding: 5.5rem 1.5rem; }
+
+    /* ===================== NAVBAR ===================== */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      padding: 1.25rem 2rem; display: flex; align-items: center;
+      justify-content: space-between; transition: all .3s;
+    }
+    #navbar.scrolled {
+      background: rgba(26,22,18,.97); backdrop-filter: blur(14px);
+      padding: .9rem 2rem; box-shadow: 0 2px 24px rgba(0,0,0,.35);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif; font-size: 1.45rem;
+      font-weight: 700; color: #fff; letter-spacing: .02em;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      color: rgba(255,255,255,.8); font-size: .85rem; font-weight: 500;
+      letter-spacing: .06em; text-transform: uppercase; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-wa {
+      display: flex; align-items: center; gap: .45rem;
+      background: var(--wa); color: #fff; padding: .55rem 1.2rem;
+      border-radius: var(--radius); font-size: .82rem; font-weight: 600;
+      transition: background .2s;
+    }
+    .nav-wa:hover { background: var(--wa-dk); }
+    .hamburger {
+      display: none; background: none; border: none;
+      cursor: pointer; color: #fff; font-size: 1.6rem; line-height: 1;
+    }
+    .mobile-menu {
+      display: none; flex-direction: column; gap: 0;
+      background: rgba(26,22,18,.98); position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0; z-index: 800;
+      padding: 5rem 2rem 2rem; align-items: flex-start;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: #fff; font-size: 1.4rem; font-weight: 600;
+      font-family: 'Playfair Display', serif;
+      padding: .875rem 0; border-bottom: 1px solid rgba(255,255,255,.08);
+      width: 100%; transition: color .2s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-close {
+      position: absolute; top: 1.25rem; right: 1.5rem;
+      background: none; border: none; color: #fff;
+      font-size: 2rem; cursor: pointer; line-height: 1;
+    }
+
+    /* ===================== HERO ===================== */
+    #hero {
+      min-height: 100vh; position: relative;
+      display: flex; align-items: center; overflow: hidden;
+    }
+    .hero-bg { position: absolute; inset: 0; background: #1C1510; }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(110deg, rgba(15,10,6,.93) 0%, rgba(15,10,6,.72) 55%, rgba(15,10,6,.3) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 2; max-width: 1200px;
+      margin: 0 auto; padding: 6rem 2rem 4rem;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(184,150,90,.16); border: 1px solid rgba(184,150,90,.38);
+      color: var(--gold-lt); padding: .45rem 1.1rem; border-radius: 2px;
+      font-size: .72rem; font-weight: 600; letter-spacing: .14em;
+      text-transform: uppercase; margin-bottom: 1.75rem;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5.5vw, 4rem);
+      font-weight: 700; color: #fff; line-height: 1.12;
+      margin-bottom: 1.25rem; max-width: 700px;
+    }
+    .hero-title em { color: var(--gold); font-style: italic; display: block; }
+    .hero-subtitle {
+      font-size: 1.075rem; color: rgba(255,255,255,.68);
+      line-height: 1.75; max-width: 500px; margin-bottom: 2.5rem;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 4rem; }
+    .hero-stats {
+      display: flex; gap: 0;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.09);
+      border-radius: var(--radius); max-width: 620px; overflow: hidden;
+    }
+    .h-stat { flex: 1; text-align: center; padding: 1rem .5rem; border-right: 1px solid rgba(255,255,255,.08); }
+    .h-stat:last-child { border-right: none; }
+    .h-stat-num {
+      font-family: 'Playfair Display', serif; font-size: 1.55rem;
+      font-weight: 700; color: var(--gold); display: block;
+    }
+    .h-stat-lbl {
+      font-size: .68rem; color: rgba(255,255,255,.42);
+      text-transform: uppercase; letter-spacing: .09em; display: block; margin-top: .2rem;
+    }
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%;
+      transform: translateX(-50%); z-index: 2; text-align: center;
+      color: rgba(255,255,255,.3); font-size: .7rem;
+      letter-spacing: .1em; text-transform: uppercase;
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+    }
+    .scroll-line {
+      width: 1px; height: 40px; background: rgba(255,255,255,.12);
+      position: relative; overflow: hidden;
+    }
+    .scroll-line::after {
+      content: ''; position: absolute; top: -100%; left: 0; right: 0;
+      height: 100%; background: var(--gold);
+      animation: scrollDrop 1.8s ease infinite;
+    }
+    @keyframes scrollDrop { 0% { top: -100%; } 100% { top: 100%; } }
+
+    /* ===================== PRODUITS ===================== */
+    #produits { background: var(--cream); }
+    .products-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      overflow: hidden; border: 1px solid var(--border);
+      transition: all .3s; position: relative;
+    }
+    .product-card:hover {
+      border-color: var(--gold); transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    .product-card:hover .product-img img { transform: scale(1.06); }
+    .product-img { aspect-ratio: 4/3; overflow: hidden; position: relative; }
+    .product-img img { height: 100%; transition: transform .5s ease; }
+    .product-tag {
+      position: absolute; top: .875rem; left: .875rem;
+      background: var(--gold); color: #fff; font-size: .68rem;
+      font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      padding: .3rem .75rem; border-radius: 2px;
+    }
+    .product-body { padding: 1.25rem 1.375rem 1.5rem; }
+    .product-name {
+      font-family: 'Playfair Display', serif; font-size: 1.15rem;
+      font-weight: 700; color: var(--dark); margin-bottom: .45rem;
+    }
+    .product-desc { font-size: .875rem; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; }
+    .product-link {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .82rem; font-weight: 600; color: var(--gold);
+      letter-spacing: .04em; transition: gap .2s;
+    }
+    .product-card:hover .product-link { gap: .6rem; }
+
+    /* ===================== SERVICES ===================== */
+    #services { background: var(--dark); }
+    #services .section-title { color: #fff; }
+    #services .section-subtitle { color: rgba(255,255,255,.58); }
+    .services-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+    .service-card {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09);
+      border-radius: var(--radius-lg); padding: 2.25rem; transition: all .3s;
+      position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 3px;
+      height: 100%; background: var(--gold);
+      transform: scaleY(0); transform-origin: bottom; transition: transform .3s;
+    }
+    .service-card:hover { background: rgba(184,150,90,.07); border-color: rgba(184,150,90,.25); }
+    .service-card:hover::before { transform: scaleY(1); }
+    .service-icon {
+      width: 54px; height: 54px; background: rgba(184,150,90,.14);
+      border-radius: var(--radius); display: flex; align-items: center;
+      justify-content: center; margin-bottom: 1.375rem;
+    }
+    .service-icon i { font-size: 1.4rem; color: var(--gold); }
+    .service-name {
+      font-family: 'Playfair Display', serif; font-size: 1.25rem;
+      font-weight: 700; color: #fff; margin-bottom: .625rem;
+    }
+    .service-desc { font-size: .9rem; color: rgba(255,255,255,.58); line-height: 1.75; }
+    .services-cta {
+      background: rgba(184,150,90,.1); border: 1px solid rgba(184,150,90,.22);
+      border-radius: var(--radius-lg); padding: 2rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .services-cta-text p:first-child {
+      font-family: 'Playfair Display', serif; font-size: 1.2rem;
+      color: #fff; font-weight: 700; margin-bottom: .4rem;
+    }
+    .services-cta-text p:last-child { font-size: .9rem; color: rgba(255,255,255,.55); }
+
+    /* ===================== AVANTAGES ===================== */
+    #avantages { background: var(--white); }
+    .avantages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+    .avantage-card {
+      background: var(--cream); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 2rem 1.5rem; text-align: center;
+      transition: all .3s; position: relative; overflow: hidden;
+    }
+    .avantage-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; background: var(--gold);
+      transform: scaleX(0); transition: transform .3s;
+    }
+    .avantage-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--gold-pale); }
+    .avantage-card:hover::after { transform: scaleX(1); }
+    .avantage-icon {
+      width: 62px; height: 62px; background: var(--gold-pale);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; margin: 0 auto 1.25rem;
+    }
+    .avantage-icon i { font-size: 1.4rem; color: var(--gold); }
+    .avantage-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: var(--dark); margin-bottom: .5rem; }
+    .avantage-desc { font-size: .85rem; color: var(--muted); line-height: 1.65; }
+
+    /* ===================== GALERIE ===================== */
+    #galerie { background: var(--cream); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 240px 240px;
+      gap: 1rem;
+    }
+    .gallery-item {
+      border-radius: var(--radius-lg); overflow: hidden;
+      position: relative; cursor: pointer;
+    }
+    .gallery-item img { height: 100%; width: 100%; transition: transform .5s ease; }
+    .gallery-item:hover img { transform: scale(1.08); }
+    .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+    .gallery-item:nth-child(4) { grid-row: span 2; }
+    .gallery-overlay {
+      position: absolute; inset: 0;
+      background: rgba(26,22,18,.0); transition: background .3s;
+      display: flex; align-items: flex-end; padding: 1.25rem;
+    }
+    .gallery-item:hover .gallery-overlay { background: rgba(26,22,18,.45); }
+    .gallery-label {
+      background: rgba(184,150,90,.9); color: #fff;
+      font-size: .78rem; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; padding: .4rem .9rem;
+      border-radius: 2px; opacity: 0; transform: translateY(8px);
+      transition: all .3s;
+    }
+    .gallery-item:hover .gallery-label { opacity: 1; transform: translateY(0); }
+
+    /* ===================== TEMOIGNAGES ===================== */
+    #temoignages { background: var(--white); }
+    .temoignages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .temoignage-card {
+      background: var(--cream); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 2rem 1.75rem;
+      position: relative; transition: all .3s;
+    }
+    .temoignage-card:hover { box-shadow: var(--shadow-md); border-color: var(--gold-pale); }
+    .quote-mark {
+      font-family: 'Playfair Display', serif; font-size: 5rem;
+      color: var(--gold); opacity: .18; line-height: .8;
+      position: absolute; top: 1rem; left: 1.5rem;
+    }
+    .stars { color: var(--gold); font-size: 1rem; letter-spacing: .1em; margin-bottom: 1rem; }
+    .temoignage-text {
+      font-size: .925rem; color: var(--text); line-height: 1.75;
+      font-style: italic; margin-bottom: 1.5rem; position: relative; z-index: 1;
+    }
+    .temoignage-author { display: flex; align-items: center; gap: .875rem; }
+    .author-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--gold-pale); display: flex; align-items: center;
+      justify-content: center; font-family: 'Playfair Display', serif;
+      font-weight: 700; color: var(--gold); font-size: .95rem; flex-shrink: 0;
+      border: 2px solid rgba(184,150,90,.25);
+    }
+    .author-name { font-weight: 600; font-size: .9rem; color: var(--dark); }
+    .author-loc { font-size: .78rem; color: var(--muted); margin-top: .1rem; }
+
+    /* ===================== CONTACT ===================== */
+    #contact { background: var(--dark); }
+    #contact .section-title { color: #fff; }
+    #contact .section-subtitle { color: rgba(255,255,255,.55); }
+    .contact-wrap { display: grid; grid-template-columns: 1fr 1.55fr; gap: 4rem; align-items: start; }
+    .contact-info-item { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.75rem; }
+    .contact-icon {
+      width: 46px; height: 46px; background: rgba(184,150,90,.15);
+      border-radius: var(--radius); display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0;
+    }
+    .contact-icon i { font-size: 1.15rem; color: var(--gold); }
+    .contact-lbl { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.35); margin-bottom: .25rem; }
+    .contact-val { color: rgba(255,255,255,.82); font-size: .9rem; line-height: 1.6; }
+    .contact-val a { color: var(--gold-lt); }
+    .contact-form-wrap {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09);
+      border-radius: var(--radius-lg); padding: 2.25rem;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label {
+      display: block; font-size: .72rem; text-transform: uppercase;
+      letter-spacing: .1em; color: rgba(255,255,255,.45); margin-bottom: .5rem;
+    }
+    .form-control {
+      width: 100%; background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius);
+      padding: .75rem 1rem; color: #fff; font-family: 'Inter', sans-serif;
+      font-size: .9rem; outline: none; transition: border-color .2s;
+    }
+    .form-control::placeholder { color: rgba(255,255,255,.22); }
+    .form-control:focus { border-color: var(--gold); }
+    textarea.form-control { resize: vertical; min-height: 110px; }
+    select.form-control option { background: #2C2520; color: #fff; }
+    .btn-submit {
+      width: 100%; background: var(--wa); color: #fff; padding: .9rem;
+      border: none; border-radius: var(--radius); font-family: 'Inter', sans-serif;
+      font-weight: 600; font-size: .95rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+      transition: background .2s; letter-spacing: .02em;
+    }
+    .btn-submit:hover { background: var(--wa-dk); }
+
+    /* ===================== FOOTER ===================== */
+    footer { background: #0D0B08; padding: 4rem 1.5rem 2rem; }
+    .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+    .footer-brand-name {
+      font-family: 'Playfair Display', serif; font-size: 1.5rem;
+      font-weight: 700; color: #fff; margin-bottom: .625rem;
+    }
+    .footer-brand-name span { color: var(--gold); }
+    .footer-tagline { font-size: .875rem; color: rgba(255,255,255,.38); line-height: 1.7; margin-bottom: 1.5rem; }
+    .footer-socials { display: flex; gap: .625rem; }
+    .social-link {
+      width: 38px; height: 38px; background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,.45); transition: all .22s;
+    }
+    .social-link:hover { background: rgba(184,150,90,.2); border-color: rgba(184,150,90,.4); color: var(--gold); }
+    .footer-heading {
+      font-size: .72rem; text-transform: uppercase; letter-spacing: .13em;
+      color: rgba(255,255,255,.55); margin-bottom: 1.25rem; font-weight: 600;
+    }
+    .footer-links li { margin-bottom: .6rem; }
+    .footer-links a {
+      color: rgba(255,255,255,.38); font-size: .875rem; transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto; padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,.06);
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: .8rem; color: rgba(255,255,255,.3); flex-wrap: wrap; gap: .5rem;
+    }
+
+    /* ===================== FLOATING WHATSAPP ===================== */
+    .wa-float {
+      position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 800;
+      width: 58px; height: 58px; background: var(--wa);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 24px rgba(37,211,102,.45), 0 0 0 0 rgba(37,211,102,.4);
+      animation: waPulse 2.2s ease infinite;
+      transition: transform .2s;
+    }
+    .wa-float:hover { transform: scale(1.1); }
+    .wa-float svg { width: 30px; height: 30px; fill: #fff; }
+    @keyframes waPulse {
+      0%, 100% { box-shadow: 0 6px 24px rgba(37,211,102,.45), 0 0 0 0 rgba(37,211,102,.4); }
+      60% { box-shadow: 0 6px 24px rgba(37,211,102,.45), 0 0 0 14px rgba(37,211,102,.0); }
+    }
+    .wa-tooltip {
+      position: absolute; right: 68px; top: 50%; transform: translateY(-50%);
+      background: var(--dark); color: #fff; font-size: .78rem; font-weight: 600;
+      white-space: nowrap; padding: .4rem .9rem; border-radius: var(--radius);
+      opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .wa-float:hover .wa-tooltip { opacity: 1; }
+
+    /* ===================== REVEAL ANIMATIONS ===================== */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-28px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 1024px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
+      .gallery-item:nth-child(1), .gallery-item:nth-child(4) { grid-column: span 1; grid-row: span 1; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      section { padding: 4rem 1.25rem; }
+      .nav-links, .nav-wa { display: none; }
+      .hamburger { display: block; }
+      .services-wrap { grid-template-columns: 1fr; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .hero-content { padding: 5.5rem 1.25rem 3rem; }
+      .hero-stats { flex-wrap: wrap; }
+      .h-stat { min-width: 50%; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .services-cta { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =================== NAVBAR =================== -->
+<nav id="navbar" aria-label="Navigation principale">
+  <a href="#hero" class="nav-logo">Maison<span>Elite</span></a>
+  <ul class="nav-links" role="list">
+    <li><a href="#produits">Produits</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#avantages">Pourquoi nous</a></li>
+    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://wa.me/2250700000000" class="nav-wa" aria-label="WhatsApp">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Commander sur WhatsApp
+  </a>
+  <button class="hamburger" id="menuBtn" aria-label="Ouvrir le menu" aria-expanded="false">
+    <i class="ti ti-menu-2" aria-hidden="true"></i>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<nav class="mobile-menu" id="mobileMenu" aria-label="Menu mobile">
+  <button class="mobile-close" id="menuClose" aria-label="Fermer le menu">&times;</button>
+  <a href="#produits">Produits</a>
+  <a href="#services">Services</a>
+  <a href="#avantages">Pourquoi nous</a>
+  <a href="#galerie">Galerie</a>
+  <a href="#temoignages">Avis clients</a>
+  <a href="#contact">Contact</a>
+  <br/>
+  <a href="https://wa.me/2250700000000" class="btn btn-wa" style="margin-top:1rem">
+    Commander sur WhatsApp
+  </a>
+</nav>
+
+<!-- =================== HERO =================== -->
+<section id="hero" aria-label="Présentation">
+  <div class="hero-bg">
+    <!-- SVG Room Scene -->
+    <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect x="0" y="620" width="1440" height="280" fill="#2A1F16"/>
+      <line x1="0" y1="658" x2="1440" y2="658" stroke="#362920" stroke-width="1"/>
+      <line x1="0" y1="700" x2="1440" y2="700" stroke="#362920" stroke-width="1"/>
+      <line x1="0" y1="742" x2="1440" y2="742" stroke="#362920" stroke-width=".8"/>
+      <line x1="0" y1="784" x2="1440" y2="784" stroke="#362920" stroke-width=".8"/>
+      <line x1="300" y1="620" x2="300" y2="900" stroke="#362920" stroke-width=".8"/>
+      <line x1="600" y1="620" x2="600" y2="900" stroke="#362920" stroke-width=".8"/>
+      <line x1="900" y1="620" x2="900" y2="900" stroke="#362920" stroke-width=".8"/>
+      <line x1="1200" y1="620" x2="1200" y2="900" stroke="#362920" stroke-width=".8"/>
+      <rect x="0" y="0" width="1440" height="625" fill="#211910"/>
+      <!-- Large window -->
+      <rect x="880" y="55" width="360" height="490" rx="4" fill="#1A3045"/>
+      <rect x="880" y="55" width="360" height="490" rx="4" fill="none" stroke="#7A5C3A" stroke-width="9"/>
+      <line x1="1060" y1="55" x2="1060" y2="545" stroke="#7A5C3A" stroke-width="5"/>
+      <line x1="880" y1="300" x2="1240" y2="300" stroke="#7A5C3A" stroke-width="5"/>
+      <rect x="889" y="64" width="163" height="229" rx="2" fill="#1E3A5F"/>
+      <rect x="889" y="309" width="163" height="230" rx="2" fill="#1A3355"/>
+      <rect x="1069" y="64" width="163" height="229" rx="2" fill="#1E3A5F"/>
+      <rect x="1069" y="309" width="163" height="230" rx="2" fill="#1A3355"/>
+      <circle cx="940" cy="115" r="1.5" fill="#fff" opacity=".6"/>
+      <circle cx="985" cy="88" r="1" fill="#fff" opacity=".5"/>
+      <circle cx="1015" cy="145" r="1.5" fill="#fff" opacity=".7"/>
+      <circle cx="955" cy="180" r="1" fill="#fff" opacity=".4"/>
+      <circle cx="1110" cy="125" r="1.5" fill="#fff" opacity=".55"/>
+      <circle cx="1160" cy="88" r="1" fill="#fff" opacity=".7"/>
+      <circle cx="1190" cy="165" r="1" fill="#fff" opacity=".4"/>
+      <circle cx="1205" cy="108" r="20" fill="#E8D9A0" opacity=".38"/>
+      <!-- Curtains -->
+      <path d="M880 55 Q848 210 862 545 L880 545 Z" fill="#5C3D2A" opacity=".92"/>
+      <path d="M1240 55 Q1272 210 1258 545 L1240 545 Z" fill="#5C3D2A" opacity=".92"/>
+      <rect x="845" y="46" width="420" height="13" rx="6.5" fill="#8B6A3A"/>
+      <circle cx="843" cy="52" r="9" fill="#9A7848"/>
+      <circle cx="1267" cy="52" r="9" fill="#9A7848"/>
+      <!-- Small window -->
+      <rect x="165" y="95" width="215" height="270" rx="4" fill="#1A3045"/>
+      <rect x="165" y="95" width="215" height="270" rx="4" fill="none" stroke="#7A5C3A" stroke-width="6"/>
+      <line x1="272" y1="95" x2="272" y2="365" stroke="#7A5C3A" stroke-width="4"/>
+      <line x1="165" y1="230" x2="380" y2="230" stroke="#7A5C3A" stroke-width="4"/>
+      <rect x="171" y="101" width="95" height="123" rx="2" fill="#1E3A5F"/>
+      <rect x="171" y="236" width="95" height="123" rx="2" fill="#1A3355"/>
+      <rect x="278" y="101" width="95" height="123" rx="2" fill="#1E3A5F"/>
+      <rect x="278" y="236" width="95" height="123" rx="2" fill="#1A3355"/>
+      <path d="M165 95 Q145 182 155 365 L165 365 Z" fill="#5C3D2A"/>
+      <path d="M380 95 Q400 182 390 365 L380 365 Z" fill="#5C3D2A"/>
+      <rect x="144" y="88" width="252" height="11" rx="5.5" fill="#8B6A3A"/>
+      <!-- Sofa -->
+      <rect x="660" y="448" width="560" height="145" rx="18" fill="#3D2B1F"/>
+      <rect x="669" y="457" width="542" height="127" rx="14" fill="#4A3425"/>
+      <rect x="648" y="558" width="600" height="82" rx="12" fill="#3D2B1F"/>
+      <rect x="657" y="565" width="582" height="70" rx="10" fill="#4A3425"/>
+      <rect x="680" y="463" width="160" height="114" rx="11" fill="#5C4230"/>
+      <rect x="860" y="463" width="160" height="114" rx="11" fill="#5C4230"/>
+      <rect x="1040" y="463" width="160" height="114" rx="11" fill="#5C4230"/>
+      <rect x="658" y="632" width="22" height="32" rx="4" fill="#2A1C12"/>
+      <rect x="1218" y="632" width="22" height="32" rx="4" fill="#2A1C12"/>
+      <rect x="698" y="538" width="84" height="62" rx="8" fill="#8B6A3A" opacity=".9"/>
+      <rect x="714" y="544" width="52" height="52" rx="6" fill="#9A7848" opacity=".7"/>
+      <rect x="1105" y="538" width="84" height="62" rx="8" fill="#6B4A2A" opacity=".9"/>
+      <!-- Armchair -->
+      <rect x="330" y="498" width="235" height="125" rx="14" fill="#3D2B1F"/>
+      <rect x="339" y="507" width="217" height="108" rx="10" fill="#4A3425"/>
+      <rect x="318" y="574" width="258" height="68" rx="10" fill="#3D2B1F"/>
+      <rect x="327" y="581" width="240" height="56" rx="8" fill="#4A3425"/>
+      <rect x="318" y="528" width="26" height="125" rx="8" fill="#3A2518"/>
+      <rect x="550" y="528" width="26" height="125" rx="8" fill="#3A2518"/>
+      <rect x="342" y="550" width="200" height="62" rx="8" fill="#6B4A2A"/>
+      <rect x="328" y="636" width="18" height="30" rx="4" fill="#2A1C12"/>
+      <rect x="548" y="636" width="18" height="30" rx="4" fill="#2A1C12"/>
+      <!-- Coffee table -->
+      <rect x="480" y="604" width="340" height="14" rx="4" fill="#8B6A3A"/>
+      <rect x="480" y="604" width="340" height="6" rx="3" fill="#9A7848"/>
+      <rect x="490" y="616" width="14" height="38" rx="3" fill="#7A5A30"/>
+      <rect x="804" y="616" width="14" height="38" rx="3" fill="#7A5A30"/>
+      <rect x="540" y="587" width="48" height="17" rx="3" fill="#C8A870" opacity=".65"/>
+      <circle cx="680" cy="594" r="15" fill="#2A3A2A" opacity=".5"/>
+      <!-- Floor lamp -->
+      <rect x="590" y="348" width="9" height="284" rx="4.5" fill="#7A5A30"/>
+      <ellipse cx="594" cy="343" rx="52" ry="23" fill="#4A3020"/>
+      <ellipse cx="594" cy="358" rx="52" ry="23" fill="#6A4830"/>
+      <ellipse cx="594" cy="375" rx="82" ry="62" fill="rgba(255,200,80,.05)"/>
+      <!-- Plants -->
+      <rect x="55" y="558" width="52" height="72" rx="6" fill="#4A3020"/>
+      <ellipse cx="81" cy="488" rx="36" ry="58" fill="#2A4A20" opacity=".9"/>
+      <ellipse cx="52" cy="510" rx="26" ry="46" fill="#3A5A2A" opacity=".8"/>
+      <ellipse cx="110" cy="504" rx="26" ry="46" fill="#2A4A20" opacity=".85"/>
+      <ellipse cx="72" cy="445" rx="21" ry="42" fill="#3A5A2A" opacity=".7"/>
+      <rect x="1335" y="558" width="60" height="82" rx="8" fill="#4A3020"/>
+      <ellipse cx="1365" cy="468" rx="46" ry="72" fill="#2A4A20" opacity=".9"/>
+      <ellipse cx="1330" cy="493" rx="32" ry="56" fill="#3A5A2A" opacity=".8"/>
+      <ellipse cx="1400" cy="488" rx="32" ry="56" fill="#2A4A20" opacity=".85"/>
+      <!-- Ceiling light -->
+      <line x1="730" y1="0" x2="730" y2="62" stroke="#7A5A30" stroke-width="3"/>
+      <ellipse cx="730" cy="70" rx="62" ry="21" fill="#4A3020"/>
+      <ellipse cx="730" cy="77" rx="57" ry="17" fill="#6A4830"/>
+      <ellipse cx="730" cy="85" rx="42" ry="13" fill="#8B6A3A"/>
+      <ellipse cx="730" cy="210" rx="310" ry="190" fill="rgba(255,200,80,.035)"/>
+      <!-- Rug -->
+      <ellipse cx="720" cy="658" rx="330" ry="42" fill="#3D2A1A" opacity=".7"/>
+      <ellipse cx="720" cy="658" rx="310" ry="36" fill="none" stroke="#5C4230" stroke-width="4" opacity=".5"/>
+      <!-- Wall art -->
+      <rect x="415" y="125" width="170" height="225" rx="4" fill="#2A1C12"/>
+      <rect x="421" y="131" width="158" height="213" rx="2" fill="#1A2A1A"/>
+      <ellipse cx="500" cy="200" rx="50" ry="75" fill="#1E3A28" opacity=".9"/>
+    </svg>
+  </div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <i class="ti ti-award" style="font-size:.85rem" aria-hidden="true"></i>
+      Qualité & élégance — Abidjan, Côte d'Ivoire
+    </div>
+
+    <h1 class="hero-title">
+      Donnez vie à votre intérieur
+      <em>avec nos meubles de qualité</em>
+    </h1>
+
+    <p class="hero-subtitle">
+      Fauteuils, lits, tapis, matelas et plus encore<br>
+      à prix accessibles — livraison rapide à Abidjan.
+    </p>
+
+    <div class="hero-actions">
+      <a href="https://wa.me/2250700000000?text=Bonjour%2C%20je%20souhaite%20commander%20un%20meuble%20chez%20MaisonElite." class="btn btn-wa" style="font-size:.95rem;padding:.9rem 2rem">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Commander maintenant sur WhatsApp
+      </a>
+      <a href="#produits" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.28);font-size:.95rem;padding:.9rem 2rem">
+        <i class="ti ti-grid" aria-hidden="true"></i>
+        Voir le catalogue
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="h-stat"><span class="h-stat-num">2 000+</span><span class="h-stat-lbl">Clients satisfaits</span></div>
+      <div class="h-stat"><span class="h-stat-num">15 ans</span><span class="h-stat-lbl">D'expérience</span></div>
+      <div class="h-stat"><span class="h-stat-num">500+</span><span class="h-stat-lbl">Références</span></div>
+      <div class="h-stat"><span class="h-stat-num">24h/24</span><span class="h-stat-lbl">Disponible</span></div>
+    </div>
+  </div>
+
+  <div class="scroll-hint" aria-hidden="true">
+    <div class="scroll-line"></div>
+    Défiler
+  </div>
+</section>
+
+<!-- =================== PRODUITS =================== -->
+<section id="produits" aria-label="Nos produits">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-label">Notre catalogue</p>
+      <h2 class="section-title">Une gamme complète<br>pour votre intérieur</h2>
+      <p class="section-subtitle">Des pièces soigneusement sélectionnées alliant esthétique raffinée et durabilité, à des prix accessibles pour tous.</p>
+    </div>
+    <div class="products-grid">
+      <!-- Fauteuils -->
+      <article class="product-card reveal">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&q=80&auto=format&fit=crop" alt="Fauteuil élégant en velours" loading="lazy"/>
+          <span class="product-tag">Nouveau</span>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Fauteuils</h3>
+          <p class="product-desc">Club, scandinave, pivotant ou capitonné — nos fauteuils allient confort exceptionnel et élégance pour sublimer chaque coin de votre salon.</p>
+          <a href="https://wa.me/2250700000000?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20vos%20fauteuils." class="product-link">
+            Commander <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </article>
+      <!-- Lits -->
+      <article class="product-card reveal" style="transition-delay:.08s">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&q=80&auto=format&fit=crop" alt="Chambre à coucher moderne avec lit king size" loading="lazy"/>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Lits & Têtes de lit</h3>
+          <p class="product-desc">Cadres en bois massif, lits rembourrés, têtes de lit capitonnées — le sommeil transformé en véritable art de vivre dans votre chambre.</p>
+          <a href="https://wa.me/2250700000000?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20vos%20lits." class="product-link">
+            Commander <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </article>
+      <!-- Meubles TV -->
+      <article class="product-card reveal" style="transition-delay:.16s">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80&auto=format&fit=crop" alt="Salon moderne avec meuble TV élégant" loading="lazy"/>
+          <span class="product-tag">Populaire</span>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Meubles TV</h3>
+          <p class="product-desc">Consoles basses, buffets, unités murales — des solutions de rangement stylées qui mettent en valeur votre espace de vie et votre écran.</p>
+          <a href="https://wa.me/2250700000000?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20vos%20meubles%20TV." class="product-link">
+            Commander <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </article>
+      <!-- Tapis -->
+      <article class="product-card reveal" style="transition-delay:.24s">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80&auto=format&fit=crop" alt="Tapis moderne et coloré pour salon" loading="lazy"/>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Tapis</h3>
+          <p class="product-desc">Tapis berbères, modernes, orientaux ou shaggy — chaque pièce raconte une histoire et apporte chaleur, texture et couleur à vos espaces.</p>
+          <a href="https://wa.me/2250700000000?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20vos%20tapis." class="product-link">
+            Commander <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </article>
+      <!-- Matelas -->
+      <article class="product-card reveal" style="transition-delay:.32s">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80&auto=format&fit=crop" alt="Matelas confortable pour un sommeil de qualité" loading="lazy"/>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Matelas</h3>
+          <p class="product-desc">Mousse HR, mémoire de forme, latex ou ressorts ensachés — des matelas adaptés à chaque morphologie pour un sommeil réparateur optimal.</p>
+          <a href="https://wa.me/2250700000000?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20vos%20matelas." class="product-link">
+            Commander <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </article>
+      <!-- Rideaux -->
+      <article class="product-card reveal" style="transition-delay:.4s">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&auto=format&fit=crop" alt="Rideaux élégants pour fenêtres" loading="lazy"/>
+          <span class="product-tag">Sur mesure</span>
+        </div>
+        <div class="product-body">
+          <h3 class="product-name">Rideaux & Stores</h3>
+          <p class="product-desc">Velours, lin, voilage ou occultant — des fenêtres habillées avec élégance et précision, coupés et posés selon vos dimensions exactes.</p>
+          <a href="https://wa.me/2250700000000?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20vos%20rideaux." class="product-link">
+            Commander <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- =================== SERVICES =================== -->
+<section id="services" aria-label="Nos services">
+  <div class="container">
+    <div class="section-header center reveal">
+      <p class="section-label">Savoir-faire artisanal</p>
+      <h2 class="section-title">Nos services<br>sur mesure</h2>
+      <p class="section-subtitle">Deux métiers d'excellence pour transformer votre intérieur et donner une seconde vie à vos meubles.</p>
+    </div>
+    <div class="services-wrap">
+      <!-- Tapisserie -->
+      <div class="service-card reveal">
+        <div class="service-icon"><i class="ti ti-needle-thread" aria-hidden="true"></i></div>
+        <h3 class="service-name">Tapisserie d'ameublement</h3>
+        <p class="service-desc">Réfection complète de fauteuils, canapés, banquettes, têtes de lit et coussins. Nous retendons les ressorts, changeons la mousse et habillons vos sièges avec des tissus haut de gamme — velours, cuir, tissus techniques — pour leur redonner une seconde vie resplendissante.</p>
+        <br/>
+        <a href="https://wa.me/2250700000000?text=Bonjour%2C%20je%20souhaite%20un%20devis%20pour%20la%20tapisserie." class="btn btn-wa-outline" style="margin-top:.5rem;padding:.6rem 1.25rem;font-size:.82rem;border-radius:4px">
+          Demander un devis
+        </a>
+      </div>
+      <!-- Menuiserie -->
+      <div class="service-card reveal" style="transition-delay:.12s">
+        <div class="service-icon"><i class="ti ti-tools" aria-hidden="true"></i></div>
+        <h3 class="service-name">Menuiserie sur mesure</h3>
+        <p class="service-desc">Fabrication artisanale de meubles en bois massif, dressings, bibliothèques, cuisines équipées et agencements d'intérieur. Chaque pièce est façonnée selon vos dimensions, vos envies et votre budget. Nos menuisiers maîtrisent les essences locales et importées pour un résultat unique.</p>
+        <br/>
+        <a href="https://wa.me/2250700000000?text=Bonjour%2C%20je%20souhaite%20un%20devis%20pour%20la%20menuiserie." class="btn btn-wa-outline" style="margin-top:.5rem;padding:.6rem 1.25rem;font-size:.82rem;border-radius:4px">
+          Demander un devis
+        </a>
+      </div>
+    </div>
+    <!-- CTA Banner -->
+    <div class="services-cta reveal">
+      <div class="services-cta-text">
+        <p>Nous réalisons vos meubles sur mesure selon vos besoins</p>
+        <p>Devis gratuit sous 24h — livraison et installation à domicile incluses</p>
+      </div>
+      <a href="https://wa.me/2250700000000?text=Bonjour%2C%20je%20voudrais%20un%20meuble%20sur%20mesure." class="btn btn-wa" style="white-space:nowrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Parler à un expert
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- =================== AVANTAGES =================== -->
+<section id="avantages" aria-label="Pourquoi nous choisir">
+  <div class="container">
+    <div class="section-header center reveal">
+      <p class="section-label">Pourquoi nous choisir ?</p>
+      <h2 class="section-title">Votre satisfaction,<br>notre priorité</h2>
+      <p class="section-subtitle">Chez MaisonElite, chaque client mérite le meilleur — en qualité, en service et en prix.</p>
+    </div>
+    <div class="avantages-grid">
+      <div class="avantage-card reveal">
+        <div class="avantage-icon"><i class="ti ti-truck-delivery" aria-hidden="true"></i></div>
+        <h3 class="avantage-title">Livraison rapide</h3>
+        <p class="avantage-desc">Livraison et installation à domicile dans tout Abidjan sous 24 à 48h après commande confirmée.</p>
+      </div>
+      <div class="avantage-card reveal" style="transition-delay:.08s">
+        <div class="avantage-icon"><i class="ti ti-clock-24" aria-hidden="true"></i></div>
+        <h3 class="avantage-title">Disponible 24h/24</h3>
+        <p class="avantage-desc">Notre équipe vous répond à toute heure sur WhatsApp — commandez quand vous voulez, selon votre rythme.</p>
+      </div>
+      <div class="avantage-card reveal" style="transition-delay:.16s">
+        <div class="avantage-icon"><i class="ti ti-pig-money" aria-hidden="true"></i></div>
+        <h3 class="avantage-title">Prix abordables</h3>
+        <p class="avantage-desc">Des meubles de qualité à prix juste. Facilités de paiement disponibles, sans compromis sur l'excellence.</p>
+      </div>
+      <div class="avantage-card reveal" style="transition-delay:.24s">
+        <div class="avantage-icon"><i class="ti ti-rosette" aria-hidden="true"></i></div>
+        <h3 class="avantage-title">Travail de qualité</h3>
+        <p class="avantage-desc">Chaque meuble est contrôlé avant livraison. Matériaux sélectionnés, finitions soignées, garantie 2 ans.</p>
+      </div>
+      <div class="avantage-card reveal" style="transition-delay:.32s">
+        <div class="avantage-icon"><i class="ti ti-ruler-measure" aria-hidden="true"></i></div>
+        <h3 class="avantage-title">Sur mesure</h3>
+        <p class="avantage-desc">Chaque commande est personnalisée selon vos dimensions, couleurs et préférences. Vous rêvez, on crée.</p>
+      </div>
+      <div class="avantage-card reveal" style="transition-delay:.4s">
+        <div class="avantage-icon"><i class="ti ti-headset" aria-hidden="true"></i></div>
+        <h3 class="avantage-title">SAV réactif</h3>
+        <p class="avantage-desc">Un service après-vente à votre écoute. Tout problème signalé est pris en charge dans les 48h ouvrées.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== GALERIE =================== -->
+<section id="galerie" aria-label="Galerie de réalisations">
+  <div class="container">
+    <div class="section-header center reveal">
+      <p class="section-label">Nos réalisations</p>
+      <h2 class="section-title">Une galerie<br>qui inspire</h2>
+      <p class="section-subtitle">Chaque photo est une réalisation réelle — le reflet de notre passion pour l'intérieur d'exception.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80&auto=format&fit=crop" alt="Salon moderne avec canapé et tapis" loading="lazy"/>
+        <div class="gallery-overlay"><span class="gallery-label">Salon complet</span></div>
+      </div>
+      <div class="gallery-item reveal" style="transition-delay:.08s">
+        <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=600&q=80&auto=format&fit=crop" alt="Chambre à coucher élégante" loading="lazy"/>
+        <div class="gallery-overlay"><span class="gallery-label">Suite parentale</span></div>
+      </div>
+      <div class="gallery-item reveal" style="transition-delay:.16s">
+        <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80&auto=format&fit=crop" alt="Intérieur décoré avec des rideaux" loading="lazy"/>
+        <div class="gallery-overlay"><span class="gallery-label">Décoration</span></div>
+      </div>
+      <div class="gallery-item reveal" style="transition-delay:.24s">
+        <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80&auto=format&fit=crop" alt="Tapis élégant dans un salon" loading="lazy"/>
+        <div class="gallery-overlay"><span class="gallery-label">Tapis & textile</span></div>
+      </div>
+      <div class="gallery-item reveal" style="transition-delay:.32s">
+        <img src="https://images.unsplash.com/photo-1556020685-ae41abfc9365?w=600&q=80&auto=format&fit=crop" alt="Fauteuil design dans un intérieur" loading="lazy"/>
+        <div class="gallery-overlay"><span class="gallery-label">Fauteuil design</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== TEMOIGNAGES =================== -->
+<section id="temoignages" aria-label="Avis clients">
+  <div class="container">
+    <div class="section-header center reveal">
+      <p class="section-label">Avis clients</p>
+      <h2 class="section-title">Ce qu'ils disent<br>de nous</h2>
+      <p class="section-subtitle">Plus de 2 000 familles d'Abidjan nous font confiance. Voici quelques-uns de leurs témoignages.</p>
+    </div>
+    <div class="temoignages-grid">
+      <div class="temoignage-card reveal">
+        <div class="quote-mark" aria-hidden="true">"</div>
+        <div class="stars" aria-label="5 étoiles">★★★★★</div>
+        <p class="temoignage-text">J'ai commandé un salon complet — canapé, fauteuils et tapis. La livraison a été faite le lendemain comme promis, et la qualité est vraiment au rendez-vous. Les voisins demandent tous où j'ai acheté !</p>
+        <div class="temoignage-author">
+          <div class="author-avatar" aria-hidden="true">AK</div>
+          <div>
+            <div class="author-name">Ama Kouassi</div>
+            <div class="author-loc"><i class="ti ti-map-pin" style="font-size:.75rem" aria-hidden="true"></i> Cocody, Abidjan</div>
+          </div>
+        </div>
+      </div>
+      <div class="temoignage-card reveal" style="transition-delay:.1s">
+        <div class="quote-mark" aria-hidden="true">"</div>
+        <div class="stars" aria-label="5 étoiles">★★★★★</div>
+        <p class="temoignage-text">La tapisserie de mes fauteuils est une transformation totale. En 48h, mes vieux fauteuils ont retrouvé une vie avec un tissu velours magnifique. Prix honnête et artisan très professionnel.</p>
+        <div class="temoignage-author">
+          <div class="author-avatar" aria-hidden="true">MB</div>
+          <div>
+            <div class="author-name">Mamadou Bamba</div>
+            <div class="author-loc"><i class="ti ti-map-pin" style="font-size:.75rem" aria-hidden="true"></i> Yopougon, Abidjan</div>
+          </div>
+        </div>
+      </div>
+      <div class="temoignage-card reveal" style="transition-delay:.2s">
+        <div class="quote-mark" aria-hidden="true">"</div>
+        <div class="stars" aria-label="5 étoiles">★★★★★</div>
+        <p class="temoignage-text">J'avais des doutes au début de commander via WhatsApp, mais tout s'est très bien passé. Les rideaux sur mesure sont parfaits, la pose incluse et le résultat est exactement ce que je voulais.</p>
+        <div class="temoignage-author">
+          <div class="author-avatar" aria-hidden="true">GD</div>
+          <div>
+            <div class="author-name">Geneviève Diallo</div>
+            <div class="author-loc"><i class="ti ti-map-pin" style="font-size:.75rem" aria-hidden="true"></i> Marcory, Abidjan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== CONTACT =================== -->
+<section id="contact" aria-label="Contact">
+  <div class="container">
+    <div class="contact-wrap">
+      <div>
+        <p class="section-label">Contactez-nous</p>
+        <h2 class="section-title reveal-left">Parlons de<br>votre projet</h2>
+        <p class="section-subtitle reveal-left" style="color:rgba(255,255,255,.55);margin-bottom:2.5rem">Réponse garantie sous 1h sur WhatsApp. Devis gratuit, sans engagement.</p>
+
+        <div class="contact-info-item reveal-left">
+          <div class="contact-icon"><i class="ti ti-brand-whatsapp" aria-hidden="true"></i></div>
+          <div>
+            <div class="contact-lbl">WhatsApp (principal)</div>
+            <div class="contact-val"><a href="https://wa.me/2250700000000">+225 07 00 00 00 00</a></div>
+          </div>
+        </div>
+        <div class="contact-info-item reveal-left" style="transition-delay:.08s">
+          <div class="contact-icon"><i class="ti ti-phone" aria-hidden="true"></i></div>
+          <div>
+            <div class="contact-lbl">Téléphone</div>
+            <div class="contact-val"><a href="tel:+2250700000000">+225 07 00 00 00 00</a></div>
+          </div>
+        </div>
+        <div class="contact-info-item reveal-left" style="transition-delay:.16s">
+          <div class="contact-icon"><i class="ti ti-mail" aria-hidden="true"></i></div>
+          <div>
+            <div class="contact-lbl">Email</div>
+            <div class="contact-val"><a href="mailto:contact@maisonelite.ci">contact@maisonelite.ci</a></div>
+          </div>
+        </div>
+        <div class="contact-info-item reveal-left" style="transition-delay:.24s">
+          <div class="contact-icon"><i class="ti ti-map-pin" aria-hidden="true"></i></div>
+          <div>
+            <div class="contact-lbl">Localisation</div>
+            <div class="contact-val">Abidjan, Côte d'Ivoire<br>Livraison dans tout Abidjan</div>
+          </div>
+        </div>
+        <div class="contact-info-item reveal-left" style="transition-delay:.32s">
+          <div class="contact-icon"><i class="ti ti-clock" aria-hidden="true"></i></div>
+          <div>
+            <div class="contact-lbl">Disponibilité</div>
+            <div class="contact-val">Tous les jours — 7h à 21h<br>WhatsApp : 24h/24, 7j/7</div>
+          </div>
+        </div>
+
+        <a href="https://wa.me/2250700000000?text=Bonjour%20MaisonElite%2C%20je%20souhaite%20obtenir%20un%20devis." class="btn btn-wa reveal-left" style="margin-top:1rem;transition-delay:.4s">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Écrire sur WhatsApp maintenant
+        </a>
+      </div>
+
+      <div class="contact-form-wrap reveal">
+        <h3 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.15rem;margin-bottom:1.5rem">Envoyer un message</h3>
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="prenom">Prénom</label>
+              <input class="form-control" type="text" id="prenom" name="prenom" placeholder="Jean" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="nom">Nom</label>
+              <input class="form-control" type="text" id="nom" name="nom" placeholder="Dupont" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="telephone">WhatsApp / Téléphone</label>
+            <input class="form-control" type="tel" id="telephone" name="telephone" placeholder="+225 07 XX XX XX XX" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="sujet">Je suis intéressé(e) par</label>
+            <select class="form-control" id="sujet" name="sujet">
+              <option value="">Choisir un produit ou service...</option>
+              <option>Fauteuils</option>
+              <option>Lits & Têtes de lit</option>
+              <option>Meubles TV</option>
+              <option>Tapis</option>
+              <option>Matelas</option>
+              <option>Rideaux & Stores</option>
+              <option>Tapisserie</option>
+              <option>Menuiserie sur mesure</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">Message</label>
+            <textarea class="form-control" id="message" name="message" placeholder="Décrivez votre besoin, vos dimensions, votre budget..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Envoyer via WhatsApp
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== FOOTER =================== -->
+<footer aria-label="Pied de page">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Maison<span>Elite</span></div>
+      <p class="footer-tagline">Votre spécialiste en meubles de qualité, tapisserie et menuiserie sur mesure à Abidjan, Côte d'Ivoire. Livraison rapide, prix accessibles.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-link" aria-label="Facebook"><i class="ti ti-brand-facebook" aria-hidden="true"></i></a>
+        <a href="#" class="social-link" aria-label="Instagram"><i class="ti ti-brand-instagram" aria-hidden="true"></i></a>
+        <a href="#" class="social-link" aria-label="TikTok"><i class="ti ti-brand-tiktok" aria-hidden="true"></i></a>
+        <a href="https://wa.me/2250700000000" class="social-link" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp" aria-hidden="true"></i></a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Produits</div>
+      <ul class="footer-links">
+        <li><a href="#produits">Fauteuils</a></li>
+        <li><a href="#produits">Lits</a></li>
+        <li><a href="#produits">Meubles TV</a></li>
+        <li><a href="#produits">Tapis</a></li>
+        <li><a href="#produits">Matelas</a></li>
+        <li><a href="#produits">Rideaux</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Services</div>
+      <ul class="footer-links">
+        <li><a href="#services">Tapisserie</a></li>
+        <li><a href="#services">Menuiserie</a></li>
+        <li><a href="#services">Sur mesure</a></li>
+        <li><a href="#services">Livraison</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Contact</div>
+      <ul class="footer-links">
+        <li><a href="https://wa.me/2250700000000">WhatsApp</a></li>
+        <li><a href="tel:+2250700000000">+225 07 00 00 00 00</a></li>
+        <li><a href="mailto:contact@maisonelite.ci">contact@maisonelite.ci</a></li>
+        <li><a href="#contact">Abidjan, Côte d'Ivoire</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 MaisonElite. Tous droits réservés.</span>
+    <span>Abidjan, Côte d'Ivoire 🇨🇮</span>
+  </div>
+</footer>
+
+<!-- =================== FLOATING WHATSAPP =================== -->
+<a href="https://wa.me/2250700000000?text=Bonjour%20MaisonElite%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20vos%20meubles." class="wa-float" aria-label="Nous contacter sur WhatsApp">
+  <span class="wa-tooltip">Commander sur WhatsApp</span>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- =================== JAVASCRIPT =================== -->
+<script>
+  /* --- Navbar scroll --- */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  /* --- Mobile menu --- */
+  const menuBtn = document.getElementById('menuBtn');
+  const menuClose = document.getElementById('menuClose');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  function openMenu() {
+    mobileMenu.classList.add('open');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    mobileMenu.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  menuBtn.addEventListener('click', openMenu);
+  menuClose.addEventListener('click', closeMenu);
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  /* --- Smooth scroll anchor links --- */
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', e => {
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  /* --- Scroll reveal animation --- */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-left').forEach(el => {
+    revealObserver.observe(el);
+  });
+
+  /* --- Contact form → redirect to WhatsApp --- */
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const prenom = document.getElementById('prenom').value.trim();
+    const nom = document.getElementById('nom').value.trim();
+    const tel = document.getElementById('telephone').value.trim();
+    const sujet = document.getElementById('sujet').value;
+    const message = document.getElementById('message').value.trim();
+
+    const text = `Bonjour MaisonElite ! 👋\n\nJe m'appelle *${prenom} ${nom}*.\nTéléphone : ${tel}\nSujet : ${sujet || 'Non précisé'}\n\n${message || 'Je souhaite obtenir des informations.'}`;
+    const url = 'https://wa.me/2250700000000?text=' + encodeURIComponent(text);
+
+    const btn = document.getElementById('submitBtn');
+    btn.innerHTML = '✓ Redirection vers WhatsApp...';
+    btn.style.background = '#1aab52';
+
+    setTimeout(() => {
+      window.open(url, '_blank');
+      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Envoyer via WhatsApp';
+      btn.style.background = '';
+      this.reset();
+    }, 800);
+  });
+</script>
+
+</body>
+</html>
