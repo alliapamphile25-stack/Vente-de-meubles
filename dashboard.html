@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MaisonElite — Dashboard Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --gold:#B8965A; --gold-lt:#D4B07A; --gold-pale:#FBF5EB;
+      --dark:#1A1612; --dark2:#2C2520;
+      --bg:#F4F1ED; --white:#FFFFFF;
+      --text:#2D2825; --muted:#7A6E68; --border:#E5DDD5;
+      --sidebar-w:240px;
+      --green:#22C55E; --green-bg:#F0FDF4;
+      --red:#EF4444; --red-bg:#FEF2F2;
+      --blue:#3B82F6; --blue-bg:#EFF6FF;
+      --purple:#8B5CF6; --purple-bg:#F5F3FF;
+      --wa:#25D366; --wa-bg:#DCFCE7;
+    }
+    html{font-size:15px}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;overflow-x:hidden}
+
+    /* ===== SIDEBAR ===== */
+    .sidebar{
+      width:var(--sidebar-w);flex-shrink:0;background:var(--dark);
+      display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;
+      transition:transform .3s;
+    }
+    .sidebar-logo{
+      padding:1.5rem 1.25rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.07);
+    }
+    .logo-text{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:#fff}
+    .logo-text span{color:var(--gold)}
+    .logo-sub{font-size:.68rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-top:.2rem}
+    .sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto}
+    .nav-section-label{
+      font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;
+      color:rgba(255,255,255,.28);padding:.875rem 1.25rem .4rem;
+    }
+    .nav-item{
+      display:flex;align-items:center;gap:.75rem;padding:.65rem 1.25rem;
+      color:rgba(255,255,255,.55);font-size:.875rem;font-weight:500;
+      cursor:pointer;border-left:3px solid transparent;transition:all .18s;
+      text-decoration:none;
+    }
+    .nav-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.9)}
+    .nav-item.active{background:rgba(184,150,90,.12);color:var(--gold);border-left-color:var(--gold)}
+    .nav-item i{font-size:1.1rem;flex-shrink:0}
+    .nav-badge{
+      margin-left:auto;background:var(--gold);color:#fff;
+      font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:10px;
+    }
+    .sidebar-footer{
+      padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.07);
+    }
+    .sidebar-user{display:flex;align-items:center;gap:.75rem}
+    .user-avatar{
+      width:36px;height:36px;border-radius:50%;background:rgba(184,150,90,.25);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;font-size:.82rem;color:var(--gold);flex-shrink:0;
+    }
+    .user-name{font-size:.82rem;font-weight:600;color:#fff}
+    .user-role{font-size:.7rem;color:rgba(255,255,255,.35)}
+
+    /* ===== MAIN ===== */
+    .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
+
+    /* ===== TOPBAR ===== */
+    .topbar{
+      background:var(--white);border-bottom:1px solid var(--border);
+      padding:.875rem 2rem;display:flex;align-items:center;justify-content:space-between;
+      position:sticky;top:0;z-index:50;
+    }
+    .topbar-left{display:flex;align-items:center;gap:1rem}
+    .page-title{font-size:1.05rem;font-weight:700;color:var(--text)}
+    .page-date{font-size:.78rem;color:var(--muted)}
+    .topbar-right{display:flex;align-items:center;gap:.75rem}
+    .topbar-btn{
+      width:36px;height:36px;border-radius:8px;border:1px solid var(--border);
+      background:var(--white);display:flex;align-items:center;justify-content:center;
+      cursor:pointer;color:var(--muted);font-size:1rem;transition:all .18s;position:relative;
+    }
+    .topbar-btn:hover{background:var(--bg);color:var(--text)}
+    .notif-dot{
+      position:absolute;top:6px;right:6px;width:7px;height:7px;
+      background:var(--red);border-radius:50%;border:1.5px solid #fff;
+    }
+    .topbar-wa{
+      display:flex;align-items:center;gap:.45rem;background:var(--wa);color:#fff;
+      padding:.45rem 1rem;border-radius:8px;font-size:.8rem;font-weight:600;
+      cursor:pointer;border:none;transition:background .18s;text-decoration:none;
+    }
+    .topbar-wa:hover{background:#1aab52}
+    .hamburger-btn{
+      display:none;background:none;border:none;cursor:pointer;
+      color:var(--text);font-size:1.25rem;padding:.25rem;
+    }
+
+    /* ===== CONTENT ===== */
+    .content{padding:1.75rem 2rem;flex:1}
+
+    /* ===== KPI CARDS ===== */
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem}
+    .kpi-card{
+      background:var(--white);border:1px solid var(--border);border-radius:12px;
+      padding:1.25rem 1.375rem;position:relative;overflow:hidden;transition:all .2s;
+    }
+    .kpi-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.08);transform:translateY(-2px)}
+    .kpi-label{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.875rem}
+    .kpi-value{font-size:1.75rem;font-weight:700;color:var(--text);line-height:1;margin-bottom:.625rem}
+    .kpi-change{display:flex;align-items:center;gap:.35rem;font-size:.78rem;font-weight:500}
+    .kpi-change.up{color:var(--green)}
+    .kpi-change.down{color:var(--red)}
+    .kpi-icon{
+      position:absolute;top:1.125rem;right:1.125rem;width:40px;height:40px;
+      border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+    }
+    .kpi-icon.gold{background:var(--gold-pale);color:var(--gold)}
+    .kpi-icon.green{background:var(--green-bg);color:var(--green)}
+    .kpi-icon.blue{background:var(--blue-bg);color:var(--blue)}
+    .kpi-icon.purple{background:var(--purple-bg);color:var(--purple)}
+
+    /* ===== GRID 2 COL ===== */
+    .grid-2{display:grid;grid-template-columns:1.6fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+
+    /* ===== CARD ===== */
+    .card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    .card-header{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:1.125rem 1.375rem;border-bottom:1px solid var(--border);
+    }
+    .card-title{font-size:.9rem;font-weight:700;color:var(--text)}
+    .card-action{font-size:.78rem;color:var(--gold);font-weight:600;cursor:pointer;background:none;border:none}
+    .card-body{padding:1.375rem}
+
+    /* ===== CHART ===== */
+    .chart-wrap{position:relative;height:220px}
+
+    /* ===== TABLE ===== */
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;font-size:.82rem}
+    thead th{
+      text-align:left;padding:.625rem 1rem;font-size:.7rem;font-weight:700;
+      color:var(--muted);text-transform:uppercase;letter-spacing:.08em;
+      background:var(--bg);border-bottom:1px solid var(--border);
+    }
+    tbody td{padding:.75rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+    tbody tr:last-child td{border-bottom:none}
+    tbody tr:hover td{background:#FAFAF9}
+    .order-id{font-weight:700;color:var(--text);font-size:.8rem}
+    .order-client{font-weight:500}
+    .order-product{color:var(--muted);font-size:.78rem}
+    .order-price{font-weight:700;color:var(--text)}
+
+    /* ===== BADGE ===== */
+    .badge{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .65rem;border-radius:6px;font-size:.72rem;font-weight:600}
+    .badge-success{background:var(--green-bg);color:#16A34A}
+    .badge-warning{background:#FFFBEB;color:#D97706}
+    .badge-info{background:var(--blue-bg);color:#1D4ED8}
+    .badge-danger{background:var(--red-bg);color:#DC2626}
+    .badge-gold{background:var(--gold-pale);color:#92702A}
+
+    /* ===== PRODUCT LIST ===== */
+    .product-row{display:flex;align-items:center;gap:.875rem;padding:.875rem 0;border-bottom:1px solid var(--border)}
+    .product-row:last-child{border-bottom:none;padding-bottom:0}
+    .product-thumb{
+      width:42px;height:42px;border-radius:8px;background:var(--bg);
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.2rem;color:var(--gold);flex-shrink:0;border:1px solid var(--border);
+    }
+    .product-info{flex:1;min-width:0}
+    .product-name{font-size:.85rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .product-cat{font-size:.73rem;color:var(--muted);margin-top:.1rem}
+    .product-sales{text-align:right;flex-shrink:0}
+    .product-sales-num{font-size:.85rem;font-weight:700;color:var(--text)}
+    .product-sales-lbl{font-size:.7rem;color:var(--muted);margin-top:.1rem}
+    .progress-bar{height:4px;background:var(--border);border-radius:2px;margin-top:.4rem}
+    .progress-fill{height:100%;border-radius:2px;background:var(--gold)}
+
+    /* ===== MESSAGES WA ===== */
+    .wa-msg{display:flex;align-items:flex-start;gap:.75rem;padding:.875rem 0;border-bottom:1px solid var(--border)}
+    .wa-msg:last-child{border-bottom:none;padding-bottom:0}
+    .wa-avatar{
+      width:36px;height:36px;border-radius:50%;background:var(--wa-bg);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;font-size:.78rem;color:var(--wa);flex-shrink:0;
+    }
+    .wa-content{flex:1;min-width:0}
+    .wa-name{font-size:.85rem;font-weight:600;color:var(--text)}
+    .wa-text{font-size:.78rem;color:var(--muted);margin-top:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .wa-time{font-size:.7rem;color:var(--muted);flex-shrink:0;margin-top:.1rem}
+    .wa-unread{
+      width:8px;height:8px;border-radius:50%;background:var(--wa);
+      flex-shrink:0;margin-top:.5rem;
+    }
+
+    /* ===== QUICK ACTIONS ===== */
+    .actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    .action-btn{
+      display:flex;align-items:center;gap:.625rem;padding:.875rem 1rem;
+      border-radius:8px;border:1px solid var(--border);background:var(--white);
+      cursor:pointer;text-align:left;transition:all .18s;text-decoration:none;
+    }
+    .action-btn:hover{border-color:var(--gold);background:var(--gold-pale)}
+    .action-btn:hover .action-icon{background:var(--gold);color:#fff}
+    .action-icon{
+      width:32px;height:32px;border-radius:8px;background:var(--bg);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.95rem;color:var(--gold);flex-shrink:0;transition:all .18s;
+    }
+    .action-label{font-size:.8rem;font-weight:600;color:var(--text)}
+    .action-sub{font-size:.7rem;color:var(--muted);margin-top:.1rem}
+
+    /* ===== MINI STATS ===== */
+    .mini-stat{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid var(--border)}
+    .mini-stat:last-child{border-bottom:none;padding-bottom:0}
+    .mini-stat-label{font-size:.82rem;color:var(--muted)}
+    .mini-stat-value{font-size:.82rem;font-weight:700;color:var(--text)}
+
+    /* ===== PERIOD TABS ===== */
+    .period-tabs{display:flex;gap:.25rem;background:var(--bg);padding:.25rem;border-radius:8px}
+    .period-tab{
+      padding:.3rem .75rem;border-radius:6px;font-size:.75rem;font-weight:600;
+      cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .18s;
+    }
+    .period-tab.active{background:var(--white);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar{width:5px;height:5px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+    /* ===== RESPONSIVE ===== */
+    @media(max-width:1100px){
+      .kpi-grid{grid-template-columns:repeat(2,1fr)}
+      .grid-2{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:768px){
+      .sidebar{transform:translateX(-100%)}
+      .sidebar.open{transform:translateX(0)}
+      .main{margin-left:0}
+      .hamburger-btn{display:block}
+      .content{padding:1.25rem}
+      .grid-3{grid-template-columns:1fr}
+      .kpi-grid{grid-template-columns:1fr 1fr}
+      .topbar{padding:.875rem 1.25rem}
+    }
+    @media(max-width:480px){
+      .kpi-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">Maison<span>Elite</span></div>
+    <div class="logo-sub">Tableau de bord admin</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Principal</div>
+    <a href="#" class="nav-item active">
+      <i class="ti ti-layout-dashboard"></i> Vue d'ensemble
+    </a>
+    <a href="#" class="nav-item">
+      <i class="ti ti-shopping-bag"></i> Commandes
+      <span class="nav-badge">12</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="ti ti-brand-whatsapp"></i> Messages WhatsApp
+      <span class="nav-badge">5</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="ti ti-users"></i> Clients
+    </a>
+
+    <div class="nav-section-label">Catalogue</div>
+    <a href="#" class="nav-item">
+      <i class="ti ti-armchair"></i> Produits
+    </a>
+    <a href="#" class="nav-item">
+      <i class="ti ti-tools"></i> Services
+    </a>
+    <a href="#" class="nav-item">
+      <i class="ti ti-photo"></i> Galerie
+    </a>
+
+    <div class="nav-section-label">Rapports</div>
+    <a href="#" class="nav-item">
+      <i class="ti ti-chart-bar"></i> Statistiques
+    </a>
+    <a href="#" class="nav-item">
+      <i class="ti ti-file-analytics"></i> Rapports
+    </a>
+
+    <div class="nav-section-label">Paramètres</div>
+    <a href="index.html" class="nav-item" target="_blank">
+      <i class="ti ti-world"></i> Voir le site
+    </a>
+    <a href="#" class="nav-item">
+      <i class="ti ti-settings"></i> Paramètres
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="user-avatar">ME</div>
+      <div>
+        <div class="user-name">MaisonElite</div>
+        <div class="user-role">Administrateur</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
+        <i class="ti ti-menu-2"></i>
+      </button>
+      <div>
+        <div class="page-title">Vue d'ensemble</div>
+        <div class="page-date" id="currentDate">—</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" title="Rechercher"><i class="ti ti-search"></i></button>
+      <button class="topbar-btn" title="Notifications">
+        <i class="ti ti-bell"></i>
+        <span class="notif-dot"></span>
+      </button>
+      <a href="https://wa.me/2250700000000" target="_blank" class="topbar-wa">
+        <i class="ti ti-brand-whatsapp"></i> WhatsApp
+      </a>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- KPI CARDS -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon gold"><i class="ti ti-shopping-cart"></i></div>
+        <div class="kpi-label">Commandes ce mois</div>
+        <div class="kpi-value">47</div>
+        <div class="kpi-change up">
+          <i class="ti ti-trending-up"></i> +18% vs mois dernier
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon green"><i class="ti ti-cash"></i></div>
+        <div class="kpi-label">Revenus (FCFA)</div>
+        <div class="kpi-value">3,2M</div>
+        <div class="kpi-change up">
+          <i class="ti ti-trending-up"></i> +24% vs mois dernier
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon blue"><i class="ti ti-users"></i></div>
+        <div class="kpi-label">Nouveaux clients</div>
+        <div class="kpi-value">34</div>
+        <div class="kpi-change up">
+          <i class="ti ti-trending-up"></i> +9% vs mois dernier
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon purple"><i class="ti ti-brand-whatsapp"></i></div>
+        <div class="kpi-label">Messages reçus</div>
+        <div class="kpi-value">128</div>
+        <div class="kpi-change up">
+          <i class="ti ti-trending-up"></i> +31% vs mois dernier
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART + MESSAGES -->
+    <div class="grid-2">
+      <!-- Chart -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Évolution des ventes</span>
+          <div class="period-tabs">
+            <button class="period-tab" onclick="setPeriod('7j',this)">7j</button>
+            <button class="period-tab active" onclick="setPeriod('30j',this)">30j</button>
+            <button class="period-tab" onclick="setPeriod('6m',this)">6m</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chart-wrap">
+            <canvas id="salesChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- WhatsApp Messages -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Messages WhatsApp</span>
+          <button class="card-action">Voir tout</button>
+        </div>
+        <div class="card-body" style="padding-top:.5rem;padding-bottom:.5rem">
+          <div class="wa-msg">
+            <div class="wa-avatar">AK</div>
+            <div class="wa-content">
+              <div class="wa-name">Ama Kouassi</div>
+              <div class="wa-text">Bonjour, je voudrais commander un fauteuil...</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">
+              <div class="wa-time">il y a 5 min</div>
+              <div class="wa-unread"></div>
+            </div>
+          </div>
+          <div class="wa-msg">
+            <div class="wa-avatar">MB</div>
+            <div class="wa-content">
+              <div class="wa-name">Mamadou Bamba</div>
+              <div class="wa-text">Quel est le prix du matelas 160x200 ?</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">
+              <div class="wa-time">il y a 23 min</div>
+              <div class="wa-unread"></div>
+            </div>
+          </div>
+          <div class="wa-msg">
+            <div class="wa-avatar">GD</div>
+            <div class="wa-content">
+              <div class="wa-name">Geneviève Diallo</div>
+              <div class="wa-text">Livraison disponible à Marcory ?</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">
+              <div class="wa-time">il y a 1h</div>
+              <div class="wa-unread"></div>
+            </div>
+          </div>
+          <div class="wa-msg">
+            <div class="wa-avatar">SK</div>
+            <div class="wa-content">
+              <div class="wa-name">Sylvie Koffi</div>
+              <div class="wa-text">Merci pour la livraison rapide 🙏</div>
+            </div>
+            <div>
+              <div class="wa-time">il y a 3h</div>
+            </div>
+          </div>
+          <div class="wa-msg">
+            <div class="wa-avatar">JT</div>
+            <div class="wa-content">
+              <div class="wa-name">Jean-Paul Touré</div>
+              <div class="wa-text">Vous faites la tapisserie de canapé ?</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">
+              <div class="wa-time">il y a 5h</div>
+              <div class="wa-unread"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMMANDES + PRODUITS + ACTIONS -->
+    <div class="grid-3">
+
+      <!-- Commandes récentes -->
+      <div class="card" style="grid-column:span 2">
+        <div class="card-header">
+          <span class="card-title">Commandes récentes</span>
+          <button class="card-action">Voir tout</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>N° Commande</th>
+                <th>Client</th>
+                <th>Produit</th>
+                <th>Montant</th>
+                <th>Statut</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="order-id">#ME-0047</span></td>
+                <td><span class="order-client">Ama Kouassi</span></td>
+                <td><span class="order-product">Fauteuil Club Velours</span></td>
+                <td><span class="order-price">85 000 FCFA</span></td>
+                <td><span class="badge badge-warning">En cours</span></td>
+                <td style="color:var(--muted);font-size:.78rem">Aujourd'hui</td>
+              </tr>
+              <tr>
+                <td><span class="order-id">#ME-0046</span></td>
+                <td><span class="order-client">Mamadou Bamba</span></td>
+                <td><span class="order-product">Matelas Mémoire 160x200</span></td>
+                <td><span class="order-price">120 000 FCFA</span></td>
+                <td><span class="badge badge-info">Livraison</span></td>
+                <td style="color:var(--muted);font-size:.78rem">Hier</td>
+              </tr>
+              <tr>
+                <td><span class="order-id">#ME-0045</span></td>
+                <td><span class="order-client">Geneviève Diallo</span></td>
+                <td><span class="order-product">Rideaux Velours + pose</span></td>
+                <td><span class="order-price">65 000 FCFA</span></td>
+                <td><span class="badge badge-success">Livré</span></td>
+                <td style="color:var(--muted);font-size:.78rem">21 juin</td>
+              </tr>
+              <tr>
+                <td><span class="order-id">#ME-0044</span></td>
+                <td><span class="order-client">Koné Ibrahim</span></td>
+                <td><span class="order-product">Lit King Size + Tête de lit</span></td>
+                <td><span class="order-price">280 000 FCFA</span></td>
+                <td><span class="badge badge-success">Livré</span></td>
+                <td style="color:var(--muted);font-size:.78rem">20 juin</td>
+              </tr>
+              <tr>
+                <td><span class="order-id">#ME-0043</span></td>
+                <td><span class="order-client">Marie Assi</span></td>
+                <td><span class="order-product">Tapisserie Canapé 3 places</span></td>
+                <td><span class="order-price">95 000 FCFA</span></td>
+                <td><span class="badge badge-danger">Annulé</span></td>
+                <td style="color:var(--muted);font-size:.78rem">19 juin</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Colonne droite -->
+      <div style="display:flex;flex-direction:column;gap:1.25rem">
+
+        <!-- Top produits -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Top Produits</span>
+          </div>
+          <div class="card-body" style="padding-top:.5rem;padding-bottom:.5rem">
+            <div class="product-row">
+              <div class="product-thumb"><i class="ti ti-bed"></i></div>
+              <div class="product-info">
+                <div class="product-name">Lits & Têtes de lit</div>
+                <div class="product-cat">Chambre</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div>
+              </div>
+              <div class="product-sales">
+                <div class="product-sales-num">18</div>
+                <div class="product-sales-lbl">ventes</div>
+              </div>
+            </div>
+            <div class="product-row">
+              <div class="product-thumb"><i class="ti ti-armchair"></i></div>
+              <div class="product-info">
+                <div class="product-name">Fauteuils</div>
+                <div class="product-cat">Salon</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div>
+              </div>
+              <div class="product-sales">
+                <div class="product-sales-num">14</div>
+                <div class="product-sales-lbl">ventes</div>
+              </div>
+            </div>
+            <div class="product-row">
+              <div class="product-thumb"><i class="ti ti-layout-bottombar"></i></div>
+              <div class="product-info">
+                <div class="product-name">Tapis</div>
+                <div class="product-cat">Décoration</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div>
+              </div>
+              <div class="product-sales">
+                <div class="product-sales-num">11</div>
+                <div class="product-sales-lbl">ventes</div>
+              </div>
+            </div>
+            <div class="product-row">
+              <div class="product-thumb"><i class="ti ti-curtain"></i></div>
+              <div class="product-info">
+                <div class="product-name">Rideaux</div>
+                <div class="product-cat">Textile</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+              </div>
+              <div class="product-sales">
+                <div class="product-sales-num">8</div>
+                <div class="product-sales-lbl">ventes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions rapides -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Actions rapides</span>
+          </div>
+          <div class="card-body">
+            <div class="actions-grid">
+              <a href="https://wa.me/2250700000000" target="_blank" class="action-btn">
+                <div class="action-icon"><i class="ti ti-brand-whatsapp"></i></div>
+                <div>
+                  <div class="action-label">WhatsApp</div>
+                  <div class="action-sub">Ouvrir chat</div>
+                </div>
+              </a>
+              <a href="index.html" target="_blank" class="action-btn">
+                <div class="action-icon"><i class="ti ti-world"></i></div>
+                <div>
+                  <div class="action-label">Voir site</div>
+                  <div class="action-sub">Page publique</div>
+                </div>
+              </a>
+              <button class="action-btn" onclick="alert('Ajouter un produit — à connecter à votre backend')">
+                <div class="action-icon"><i class="ti ti-plus"></i></div>
+                <div>
+                  <div class="action-label">Nouveau produit</div>
+                  <div class="action-sub">Ajouter au catalogue</div>
+                </div>
+              </button>
+              <button class="action-btn" onclick="window.print()">
+                <div class="action-icon"><i class="ti ti-file-analytics"></i></div>
+                <div>
+                  <div class="action-label">Rapport</div>
+                  <div class="action-sub">Imprimer / PDF</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MINI STATS ROW -->
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Résumé livraisons</span></div>
+        <div class="card-body" style="padding-top:.5rem;padding-bottom:.5rem">
+          <div class="mini-stat"><span class="mini-stat-label">Livrées ce mois</span><span class="mini-stat-value" style="color:var(--green)">38</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">En cours</span><span class="mini-stat-value" style="color:var(--blue)">6</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">En attente</span><span class="mini-stat-value" style="color:#D97706">3</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Annulées</span><span class="mini-stat-value" style="color:var(--red)">2</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Taux de succès</span><span class="mini-stat-value">89%</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Revenus par catégorie</span></div>
+        <div class="card-body" style="padding-top:.5rem;padding-bottom:.5rem">
+          <div class="mini-stat"><span class="mini-stat-label">Lits & Chambres</span><span class="mini-stat-value">1 240 000 F</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Fauteuils & Salons</span><span class="mini-stat-value">780 000 F</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Tapisserie</span><span class="mini-stat-value">540 000 F</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Rideaux & Tapis</span><span class="mini-stat-value">390 000 F</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Menuiserie</span><span class="mini-stat-value">250 000 F</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Zones de livraison</span></div>
+        <div class="card-body" style="padding-top:.5rem;padding-bottom:.5rem">
+          <div class="mini-stat"><span class="mini-stat-label">Cocody</span><span class="mini-stat-value"><span class="badge badge-gold">14 cmd</span></span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Yopougon</span><span class="mini-stat-value"><span class="badge badge-gold">11 cmd</span></span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Marcory</span><span class="mini-stat-value"><span class="badge badge-gold">9 cmd</span></span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Plateau</span><span class="mini-stat-value"><span class="badge badge-gold">8 cmd</span></span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Autres</span><span class="mini-stat-value"><span class="badge badge-gold">5 cmd</span></span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Sidebar overlay mobile -->
+<div id="overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99" onclick="closeSidebar()"></div>
+
+<script>
+  /* Date */
+  const months = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  const now = new Date();
+  document.getElementById('currentDate').textContent =
+    days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+
+  /* Hamburger */
+  document.getElementById('hamburgerBtn').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('overlay').style.display = 'block';
+  });
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').style.display = 'none';
+  }
+
+  /* Period tabs */
+  function setPeriod(p, el) {
+    document.querySelectorAll('.period-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    const datasets = {
+      '7j': [12,8,15,10,22,18,25],
+      '30j': [45,52,38,65,70,58,80,72,90,85,95,88,102,98,110,95,88,75,92,108,115,100,88,72,95,110,118,105,98,122],
+      '6m': [280,320,410,380,460,520]
+    };
+    const labels = {
+      '7j': ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'],
+      '30j': Array.from({length:30},(_,i)=>`${i+1}`),
+      '6m': ['Jan','Fév','Mar','Avr','Mai','Jun']
+    };
+    salesChart.data.labels = labels[p];
+    salesChart.data.datasets[0].data = datasets[p];
+    salesChart.update('active');
+  }
+
+  /* Chart */
+  const ctx = document.getElementById('salesChart').getContext('2d');
+  const grad = ctx.createLinearGradient(0, 0, 0, 220);
+  grad.addColorStop(0, 'rgba(184,150,90,.2)');
+  grad.addColorStop(1, 'rgba(184,150,90,.0)');
+
+  const salesChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: Array.from({length:30},(_,i)=>`${i+1}`),
+      datasets: [{
+        label: 'Commandes',
+        data: [45,52,38,65,70,58,80,72,90,85,95,88,102,98,110,95,88,75,92,108,115,100,88,72,95,110,118,105,98,122],
+        borderColor: '#B8965A',
+        backgroundColor: grad,
+        borderWidth: 2.5,
+        tension: .42,
+        fill: true,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: '#B8965A',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1A1612',
+          titleColor: 'rgba(255,255,255,.6)',
+          bodyColor: '#fff',
+          borderColor: '#B8965A',
+          borderWidth: 1,
+          padding: 10,
+          callbacks: { label: ctx => ` ${ctx.parsed.y} commandes` }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: '#7A6E68', font: { size: 11 }, maxTicksLimit: 8 },
+          border: { display: false }
+        },
+        y: {
+          grid: { color: '#F0EAE0' },
+          ticks: { color: '#7A6E68', font: { size: 11 } },
+          border: { display: false }
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>
