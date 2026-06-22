@@ -8,14 +8,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script>
-    /* Vérification session — rediriger vers login si non connecté */
-    (function() {
-      try {
-        const s = JSON.parse(localStorage.getItem('me_auth_session'));
-        if (!s || Date.now() >= s.expires) {
-          window.location.replace('login.html');
-        }
-      } catch(e) { window.location.replace('login.html'); }
+    (function(){
+      try{const s=JSON.parse(localStorage.getItem('me_auth_session'));if(!s||Date.now()>=s.expires)window.location.replace('login.html');}
+      catch(e){window.location.replace('login.html');}
     })();
   </script>
   <style>
@@ -30,12 +25,13 @@
       --red:#EF4444;--red-bg:#FEF2F2;
       --blue:#3B82F6;--blue-bg:#EFF6FF;
       --purple:#8B5CF6;--purple-bg:#F5F3FF;
+      --orange:#F97316;--orange-bg:#FFF7ED;
       --wa:#25D366;--wa-bg:#DCFCE7;
     }
     html{font-size:15px}
     body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;overflow-x:hidden}
 
-    /* SIDEBAR */
+    /* ── SIDEBAR ── */
     .sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--dark);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform .3s}
     .sidebar-logo{padding:1.5rem 1.25rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.07)}
     .logo-text{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:#fff}
@@ -54,182 +50,238 @@
     .user-name{font-size:.82rem;font-weight:600;color:#fff}
     .user-role{font-size:.7rem;color:rgba(255,255,255,.35)}
 
-    /* MAIN */
+    /* ── MAIN ── */
     .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
 
-    /* TOPBAR */
-    .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:.875rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+    /* ── TOPBAR ── */
+    .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:.875rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;gap:1rem;flex-wrap:wrap}
     .topbar-left{display:flex;align-items:center;gap:1rem}
     .page-title{font-size:1.05rem;font-weight:700;color:var(--text)}
     .page-date{font-size:.78rem;color:var(--muted)}
-    .topbar-right{display:flex;align-items:center;gap:.75rem}
+    .topbar-right{display:flex;align-items:center;gap:.625rem;flex-wrap:wrap}
     .topbar-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:1rem;transition:all .18s;position:relative}
     .topbar-btn:hover{background:var(--bg);color:var(--text)}
     .notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid #fff}
     .topbar-wa{display:flex;align-items:center;gap:.45rem;background:var(--wa);color:#fff;padding:.45rem 1rem;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;border:none;transition:background .18s;text-decoration:none}
     .topbar-wa:hover{background:#1aab52}
-    .hamburger-btn{display:none;background:none;border:none;cursor:pointer;color:var(--text);font-size:1.25rem;padding:.25rem}
+    .btn-logout{display:flex;align-items:center;gap:.4rem;background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,.2);padding:.45rem 1rem;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .18s}
+    .btn-logout:hover{background:var(--red);color:#fff}
     .save-indicator{display:none;align-items:center;gap:.4rem;font-size:.78rem;color:var(--green);font-weight:600;background:var(--green-bg);padding:.35rem .75rem;border-radius:6px}
     .save-indicator.show{display:flex}
+    .hamburger-btn{display:none;background:none;border:none;cursor:pointer;color:var(--text);font-size:1.25rem;padding:.25rem}
 
-    /* CONTENT */
-    .content{padding:1.75rem 2rem;flex:1}
+    /* ── SECTIONS ── */
+    .section{display:none;padding:1.75rem 2rem;flex:1;animation:fadeIn .25s ease}
+    .section.active{display:block}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-    /* KPI CARDS */
-    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem}
+    /* ── SECTION HEADER ── */
+    .section-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem}
+    .section-heading{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--text)}
+    .section-sub{font-size:.82rem;color:var(--muted);margin-top:.2rem}
+    .section-actions{display:flex;gap:.625rem;flex-wrap:wrap}
+
+    /* ── BUTTONS ── */
+    .btn{display:inline-flex;align-items:center;gap:.45rem;padding:.65rem 1.25rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .18s;font-family:'Inter',sans-serif}
+    .btn-gold{background:var(--gold);color:#fff}
+    .btn-gold:hover{background:var(--gold-lt)}
+    .btn-outline{background:var(--white);color:var(--text);border:1px solid var(--border)}
+    .btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+    .btn-danger{background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,.15)}
+    .btn-danger:hover{background:var(--red);color:#fff}
+    .btn-sm{padding:.4rem .75rem;font-size:.75rem}
+
+    /* ── CARDS ── */
+    .card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.25rem}
+    .card-header{display:flex;align-items:center;justify-content:space-between;padding:1.125rem 1.375rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.5rem}
+    .card-title{font-size:.9rem;font-weight:700;color:var(--text)}
+    .card-body{padding:1.375rem}
+    .card-body-flush{padding:0}
+
+    /* ── KPI GRID ── */
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
     .kpi-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.375rem;position:relative;overflow:hidden;transition:all .2s}
     .kpi-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.08);transform:translateY(-2px)}
-    .kpi-label{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.875rem}
-    .kpi-value{font-size:1.75rem;font-weight:700;color:var(--text);line-height:1;margin-bottom:.625rem;cursor:pointer;border-radius:4px;padding:.1rem .25rem;transition:background .15s;display:inline-block}
+    .kpi-label{font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem}
+    .kpi-value{font-size:1.75rem;font-weight:700;color:var(--text);line-height:1;margin-bottom:.5rem;cursor:pointer;border-radius:4px;padding:.1rem .25rem;transition:background .15s;display:inline-block}
     .kpi-value:hover{background:var(--gold-pale)}
-    .kpi-value[contenteditable="true"]{outline:2px solid var(--gold);background:var(--gold-pale);border-radius:4px;padding:.1rem .4rem}
-    .kpi-change{display:flex;align-items:center;gap:.35rem;font-size:.78rem;font-weight:500}
-    .kpi-change.up{color:var(--green)}
-    .kpi-change.down{color:var(--red)}
-    .kpi-icon{position:absolute;top:1.125rem;right:1.125rem;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+    .kpi-value[contenteditable="true"]{outline:2px solid var(--gold);background:var(--gold-pale)}
+    .kpi-change{font-size:.75rem;font-weight:500;cursor:pointer;display:inline-block;border-radius:4px;padding:.1rem .25rem}
+    .kpi-change:hover{background:var(--gold-pale)}
+    .kpi-change[contenteditable="true"]{outline:2px solid var(--gold);background:var(--gold-pale)}
+    .up{color:var(--green)}.down{color:var(--red)}
+    .kpi-icon{position:absolute;top:1rem;right:1rem;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
     .kpi-icon.gold{background:var(--gold-pale);color:var(--gold)}
     .kpi-icon.green{background:var(--green-bg);color:var(--green)}
     .kpi-icon.blue{background:var(--blue-bg);color:var(--blue)}
     .kpi-icon.purple{background:var(--purple-bg);color:var(--purple)}
-    .edit-hint{font-size:.68rem;color:var(--muted);margin-top:.25rem;display:flex;align-items:center;gap:.25rem}
+    .edit-hint{font-size:.65rem;color:var(--muted);margin-top:.35rem;display:flex;align-items:center;gap:.2rem}
 
-    /* GRID */
+    /* ── GRID LAYOUT ── */
     .grid-2{display:grid;grid-template-columns:1.6fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
     .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
 
-    /* CARD */
-    .card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-    .card-header{display:flex;align-items:center;justify-content:space-between;padding:1.125rem 1.375rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.5rem}
-    .card-title{font-size:.9rem;font-weight:700;color:var(--text)}
-    .card-actions{display:flex;align-items:center;gap:.5rem}
-    .card-action{font-size:.78rem;color:var(--gold);font-weight:600;cursor:pointer;background:none;border:none;padding:.3rem .6rem;border-radius:6px;transition:background .15s}
-    .card-action:hover{background:var(--gold-pale)}
-    .card-action.danger{color:var(--red)}
-    .card-action.danger:hover{background:var(--red-bg)}
-    .card-body{padding:1.375rem}
-
-    /* CHART */
-    .chart-wrap{position:relative;height:220px}
-
-    /* TABLE */
+    /* ── TABLE ── */
     .table-wrap{overflow-x:auto}
     table{width:100%;border-collapse:collapse;font-size:.82rem}
-    thead th{text-align:left;padding:.625rem 1rem;font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;background:var(--bg);border-bottom:1px solid var(--border)}
+    thead th{text-align:left;padding:.625rem 1rem;font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;background:var(--bg);border-bottom:1px solid var(--border);white-space:nowrap}
     tbody td{padding:.7rem 1rem;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
     tbody tr:last-child td{border-bottom:none}
     tbody tr:hover td{background:#FAFAF9}
-    .order-id{font-weight:700;color:var(--text);font-size:.8rem}
-    .order-price{font-weight:700}
     .editable-cell{cursor:pointer;border-radius:4px;padding:.15rem .3rem;transition:background .15s;display:inline-block;min-width:20px}
     .editable-cell:hover{background:var(--gold-pale)}
-    .editable-cell[contenteditable="true"]{outline:2px solid var(--gold);background:var(--gold-pale);border-radius:4px;padding:.15rem .4rem}
+    .editable-cell[contenteditable="true"]{outline:2px solid var(--gold);background:var(--gold-pale)}
+    .row-actions{display:flex;gap:.35rem;opacity:0;transition:opacity .15s}
+    tbody tr:hover .row-actions{opacity:1}
+    .row-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem;color:var(--muted);transition:all .15s}
+    .row-btn.edit-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-pale)}
+    .row-btn.del-btn:hover{border-color:var(--red);color:var(--red);background:var(--red-bg)}
 
-    /* BADGE */
-    .badge{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .65rem;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;transition:opacity .15s}
-    .badge:hover{opacity:.8}
+    /* ── BADGE ── */
+    .badge{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .65rem;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer}
     .badge-success{background:var(--green-bg);color:#16A34A}
     .badge-warning{background:#FFFBEB;color:#D97706}
     .badge-info{background:var(--blue-bg);color:#1D4ED8}
     .badge-danger{background:var(--red-bg);color:#DC2626}
     .badge-gold{background:var(--gold-pale);color:#92702A}
+    .badge-purple{background:var(--purple-bg);color:#7C3AED}
 
-    /* ACTION BTNS IN TABLE */
-    .row-actions{display:flex;gap:.35rem;opacity:0;transition:opacity .15s}
-    tbody tr:hover .row-actions{opacity:1}
-    .row-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem;color:var(--muted);transition:all .15s}
-    .row-btn:hover.edit-btn{border-color:var(--gold);color:var(--gold);background:var(--gold-pale)}
-    .row-btn:hover.del-btn{border-color:var(--red);color:var(--red);background:var(--red-bg)}
+    /* ── PRODUCT CARDS (Catalogue) ── */
+    .catalogue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}
+    .catalogue-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .25s;position:relative}
+    .catalogue-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.1);border-color:var(--gold)}
+    .catalogue-card-img{aspect-ratio:4/3;background:var(--bg);display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--border)}
+    .catalogue-card-img i{font-size:3.5rem;color:var(--gold);opacity:.5}
+    .catalogue-card-status{position:absolute;top:.75rem;right:.75rem}
+    .catalogue-card-body{padding:1.125rem}
+    .catalogue-card-name{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.35rem;cursor:pointer;border-radius:4px;transition:background .15s;padding:.1rem .25rem}
+    .catalogue-card-name:hover{background:var(--gold-pale)}
+    .catalogue-card-name[contenteditable="true"]{outline:2px solid var(--gold);background:var(--gold-pale)}
+    .catalogue-card-cat{font-size:.75rem;color:var(--muted);margin-bottom:.5rem}
+    .catalogue-card-price{font-size:1rem;font-weight:700;color:var(--gold);cursor:pointer;border-radius:4px;transition:background .15s;padding:.1rem .25rem;display:inline-block}
+    .catalogue-card-price:hover{background:var(--gold-pale)}
+    .catalogue-card-price[contenteditable="true"]{outline:2px solid var(--gold);background:var(--gold-pale)}
+    .catalogue-card-desc{font-size:.8rem;color:var(--muted);margin-top:.5rem;line-height:1.6;cursor:pointer;border-radius:4px;transition:background .15s;padding:.1rem .25rem}
+    .catalogue-card-desc:hover{background:var(--gold-pale)}
+    .catalogue-card-desc[contenteditable="true"]{outline:2px solid var(--gold);background:var(--gold-pale)}
+    .catalogue-card-footer{padding:.875rem 1.125rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .catalogue-del{position:absolute;top:.75rem;left:.75rem;width:28px;height:28px;border-radius:6px;background:var(--red-bg);border:none;color:var(--red);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s;font-size:.85rem}
+    .catalogue-card:hover .catalogue-del{opacity:1}
 
-    /* ADD ROW BTN */
-    .add-row-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.75rem;border:1.5px dashed var(--border);background:transparent;border-radius:8px;cursor:pointer;color:var(--muted);font-size:.82rem;font-weight:500;transition:all .2s;margin-top:.75rem}
-    .add-row-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-pale)}
+    /* ── SERVICES CARDS ── */
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem}
+    .service-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .25s;position:relative}
+    .service-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.1);border-color:var(--gold)}
+    .service-card-header{padding:1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:1rem}
+    .service-icon-wrap{width:48px;height:48px;background:var(--gold-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .service-icon-wrap i{font-size:1.3rem;color:var(--gold)}
+    .service-card-name{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--text);cursor:pointer;border-radius:4px;padding:.1rem .25rem;transition:background .15s}
+    .service-card-name:hover{background:var(--gold-pale)}
+    .service-card-name[contenteditable="true"]{outline:2px solid var(--gold);background:var(--gold-pale)}
+    .service-card-price{font-size:.82rem;color:var(--gold);font-weight:600;cursor:pointer;border-radius:4px;padding:.1rem .25rem;transition:background .15s;display:inline-block;margin-top:.25rem}
+    .service-card-price:hover{background:var(--gold-pale)}
+    .service-card-price[contenteditable="true"]{outline:2px solid var(--gold);background:var(--gold-pale)}
+    .service-card-body{padding:1.25rem}
+    .service-card-desc{font-size:.85rem;color:var(--muted);line-height:1.7;cursor:pointer;border-radius:4px;padding:.2rem .3rem;transition:background .15s}
+    .service-card-desc:hover{background:var(--gold-pale)}
+    .service-card-desc[contenteditable="true"]{outline:2px solid var(--gold);background:var(--gold-pale);outline-offset:2px}
+    .service-card-footer{padding:.875rem 1.125rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .service-del{position:absolute;top:.75rem;right:.75rem;width:28px;height:28px;border-radius:6px;background:var(--red-bg);border:none;color:var(--red);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s;font-size:.85rem}
+    .service-card:hover .service-del{opacity:1}
 
-    /* MODAL */
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:1rem}
-    .modal-overlay.open{display:flex}
-    .modal{background:var(--white);border-radius:16px;padding:2rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;position:relative}
-    .modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--text);margin-bottom:1.5rem}
-    .modal-close{position:absolute;top:1.25rem;right:1.25rem;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1rem}
-    .modal-close:hover{background:var(--bg)}
-    .form-group{margin-bottom:1.125rem}
-    .form-label{display:block;font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
-    .form-input{width:100%;padding:.65rem .875rem;border:1px solid var(--border);border-radius:8px;font-family:'Inter',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:border-color .18s;background:var(--white)}
-    .form-input:focus{border-color:var(--gold)}
-    .form-select{width:100%;padding:.65rem .875rem;border:1px solid var(--border);border-radius:8px;font-family:'Inter',sans-serif;font-size:.875rem;color:var(--text);outline:none;background:var(--white);cursor:pointer}
-    .form-select:focus{border-color:var(--gold)}
-    .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-    .modal-footer{display:flex;gap:.75rem;margin-top:1.5rem}
-    .btn-modal-cancel{flex:1;padding:.7rem;border:1.5px solid var(--border);border-radius:8px;background:var(--white);cursor:pointer;font-size:.875rem;font-weight:600;color:var(--muted);transition:all .18s}
-    .btn-modal-cancel:hover{border-color:var(--text);color:var(--text)}
-    .btn-modal-save{flex:2;padding:.7rem;border:none;border-radius:8px;background:var(--gold);color:#fff;cursor:pointer;font-size:.875rem;font-weight:600;transition:background .18s}
-    .btn-modal-save:hover{background:var(--gold-lt)}
+    /* ── TOGGLE SWITCH ── */
+    .toggle-wrap{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--muted)}
+    .toggle{position:relative;width:36px;height:20px;cursor:pointer}
+    .toggle input{opacity:0;width:0;height:0;position:absolute}
+    .toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:20px;transition:.25s}
+    .toggle-slider::before{content:'';position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.25s}
+    .toggle input:checked+.toggle-slider{background:var(--green)}
+    .toggle input:checked+.toggle-slider::before{transform:translateX(16px)}
 
-    /* PRODUCT LIST */
-    .product-row{display:flex;align-items:center;gap:.875rem;padding:.875rem 0;border-bottom:1px solid var(--border);position:relative}
-    .product-row:last-child{border-bottom:none;padding-bottom:0}
-    .product-thumb{width:42px;height:42px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--gold);flex-shrink:0;border:1px solid var(--border)}
-    .product-info{flex:1;min-width:0}
-    .product-name{font-size:.85rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .product-cat{font-size:.73rem;color:var(--muted);margin-top:.1rem}
-    .product-sales{text-align:right;flex-shrink:0}
-    .product-sales-num{font-size:.85rem;font-weight:700;color:var(--text)}
-    .product-sales-lbl{font-size:.7rem;color:var(--muted);margin-top:.1rem}
-    .progress-bar{height:4px;background:var(--border);border-radius:2px;margin-top:.4rem}
-    .progress-fill{height:100%;border-radius:2px;background:var(--gold);transition:width .4s}
-    .product-row-del{position:absolute;right:0;top:50%;transform:translateY(-50%);opacity:0;transition:opacity .15s;background:var(--red-bg);border:1px solid var(--red-bg);color:var(--red);border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem}
-    .product-row:hover .product-row-del{opacity:1}
-
-    /* WA MESSAGES */
+    /* ── WA MESSAGES ── */
     .wa-msg{display:flex;align-items:flex-start;gap:.75rem;padding:.875rem 0;border-bottom:1px solid var(--border);position:relative}
     .wa-msg:last-child{border-bottom:none;padding-bottom:0}
-    .wa-avatar{width:36px;height:36px;border-radius:50%;background:var(--wa-bg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.78rem;color:var(--wa);flex-shrink:0}
+    .wa-avatar{width:38px;height:38px;border-radius:50%;background:var(--wa-bg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.78rem;color:var(--wa);flex-shrink:0}
     .wa-content{flex:1;min-width:0}
-    .wa-name{font-size:.85rem;font-weight:600;color:var(--text)}
+    .wa-name{font-size:.875rem;font-weight:600;color:var(--text)}
     .wa-text{font-size:.78rem;color:var(--muted);margin-top:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .wa-time{font-size:.7rem;color:var(--muted);flex-shrink:0;margin-top:.1rem}
-    .wa-unread{width:8px;height:8px;border-radius:50%;background:var(--wa);flex-shrink:0;margin-top:.5rem}
-    .wa-del{position:absolute;right:0;top:50%;transform:translateY(-50%);opacity:0;transition:opacity .15s;background:var(--red-bg);border:none;color:var(--red);border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem}
+    .wa-unread{width:8px;height:8px;border-radius:50%;background:var(--wa);flex-shrink:0;margin-top:.45rem}
+    .wa-del{opacity:0;transition:opacity .15s;background:none;border:none;color:var(--red);cursor:pointer;font-size:1rem;padding:.2rem}
     .wa-msg:hover .wa-del{opacity:1}
 
-    /* ACTIONS GRID */
-    .actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-    .action-btn{display:flex;align-items:center;gap:.625rem;padding:.875rem 1rem;border-radius:8px;border:1px solid var(--border);background:var(--white);cursor:pointer;text-align:left;transition:all .18s;text-decoration:none}
-    .action-btn:hover{border-color:var(--gold);background:var(--gold-pale)}
-    .action-btn:hover .action-icon{background:var(--gold);color:#fff}
-    .action-icon{width:32px;height:32px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:.95rem;color:var(--gold);flex-shrink:0;transition:all .18s}
-    .action-label{font-size:.8rem;font-weight:600;color:var(--text)}
-    .action-sub{font-size:.7rem;color:var(--muted);margin-top:.1rem}
+    /* ── CLIENTS TABLE ── */
+    .client-avatar{width:32px;height:32px;border-radius:50%;background:var(--gold-pale);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.72rem;color:var(--gold);flex-shrink:0}
 
-    /* MINI STATS */
-    .mini-stat{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid var(--border)}
-    .mini-stat:last-child{border-bottom:none;padding-bottom:0}
-    .mini-stat-label{font-size:.82rem;color:var(--muted)}
-    .mini-stat-value{font-size:.82rem;font-weight:700;color:var(--text)}
+    /* ── CHART ── */
+    .chart-wrap{position:relative;height:220px}
 
-    /* PERIOD TABS */
+    /* ── PERIOD TABS ── */
     .period-tabs{display:flex;gap:.25rem;background:var(--bg);padding:.25rem;border-radius:8px}
     .period-tab{padding:.3rem .75rem;border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .18s}
     .period-tab.active{background:var(--white);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.08)}
 
-    /* TOAST */
+    /* ── PRODUCT MINI ROW ── */
+    .product-row{display:flex;align-items:center;gap:.875rem;padding:.875rem 0;border-bottom:1px solid var(--border);position:relative}
+    .product-row:last-child{border-bottom:none;padding-bottom:0}
+    .product-thumb{width:42px;height:42px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--gold);flex-shrink:0;border:1px solid var(--border)}
+    .product-info{flex:1;min-width:0}
+    .product-name-mini{font-size:.85rem;font-weight:600;color:var(--text)}
+    .product-cat-mini{font-size:.73rem;color:var(--muted);margin-top:.1rem}
+    .progress-bar{height:4px;background:var(--border);border-radius:2px;margin-top:.4rem}
+    .progress-fill{height:100%;border-radius:2px;background:var(--gold)}
+    .product-sales{text-align:right;flex-shrink:0}
+    .product-sales-num{font-size:.85rem;font-weight:700}
+    .product-sales-lbl{font-size:.7rem;color:var(--muted);margin-top:.1rem}
+
+    /* ── MODAL ── */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:center;justify-content:center;padding:1rem}
+    .modal-overlay.open{display:flex}
+    .modal{background:var(--white);border-radius:16px;padding:2rem;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative}
+    .modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--text);margin-bottom:1.5rem}
+    .modal-close{position:absolute;top:1.25rem;right:1.25rem;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+    .modal-close:hover{background:var(--bg)}
+    .form-group{margin-bottom:1.125rem}
+    .form-label{display:block;font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+    .form-input,.form-select,.form-textarea{width:100%;padding:.65rem .875rem;border:1.5px solid var(--border);border-radius:8px;font-family:'Inter',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:border-color .18s;background:var(--white)}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold)}
+    .form-textarea{resize:vertical;min-height:90px}
+    .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .modal-footer{display:flex;gap:.75rem;margin-top:1.5rem}
+    .btn-cancel{flex:1;padding:.7rem;border:1.5px solid var(--border);border-radius:8px;background:var(--white);cursor:pointer;font-size:.875rem;font-weight:600;color:var(--muted);font-family:'Inter',sans-serif}
+    .btn-cancel:hover{border-color:var(--text)}
+    .btn-save{flex:2;padding:.7rem;border:none;border-radius:8px;background:var(--gold);color:#fff;cursor:pointer;font-size:.875rem;font-weight:600;font-family:'Inter',sans-serif}
+    .btn-save:hover{background:var(--gold-lt)}
+
+    /* ── TOAST ── */
     .toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;background:var(--dark);color:#fff;padding:.75rem 1.25rem;border-radius:10px;font-size:.82rem;font-weight:500;display:flex;align-items:center;gap:.5rem;box-shadow:0 8px 24px rgba(0,0,0,.2);transform:translateY(80px);opacity:0;transition:all .3s}
     .toast.show{transform:translateY(0);opacity:1}
-    .toast i{color:var(--green);font-size:1rem}
-    .toast.error i{color:var(--red)}
+    .toast .t-ok{color:var(--green)}.toast .t-err{color:var(--red)}
 
-    /* SCROLLBAR */
+    /* ── MINI STAT ── */
+    .mini-stat{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid var(--border)}
+    .mini-stat:last-child{border-bottom:none;padding-bottom:0}
+    .mini-stat-label{font-size:.82rem;color:var(--muted)}
+    .mini-stat-value{font-size:.82rem;font-weight:700}
+
+    /* ── EMPTY STATE ── */
+    .empty-state{text-align:center;padding:3rem 1rem;color:var(--muted)}
+    .empty-state i{font-size:3rem;color:var(--border);display:block;margin-bottom:.75rem}
+    .empty-state p{font-size:.9rem;margin-bottom:1.25rem}
+
+    /* ── SCROLLBAR ── */
     ::-webkit-scrollbar{width:5px;height:5px}
     ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
-    /* RESPONSIVE */
+    /* ── RESPONSIVE ── */
     @media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr 1fr}}
-    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.hamburger-btn{display:block}.content{padding:1.25rem}.grid-3{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}.topbar{padding:.875rem 1.25rem}}
-    @media(max-width:480px){.kpi-grid{grid-template-columns:1fr}.form-row-2{grid-template-columns:1fr}}
+    @media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.hamburger-btn{display:block}.section{padding:1.25rem}.grid-3{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}.topbar{padding:.875rem 1.25rem}}
+    @media(max-width:480px){.kpi-grid{grid-template-columns:1fr}.form-row-2{grid-template-columns:1fr}.catalogue-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
+<!-- ═══ SIDEBAR ═══ -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <div class="logo-text">Maison<span>Elite</span></div>
@@ -237,17 +289,15 @@
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section-label">Principal</div>
-    <a href="#" class="nav-item active"><i class="ti ti-layout-dashboard"></i> Vue d'ensemble</a>
-    <a href="#" class="nav-item" onclick="showSection('commandes')"><i class="ti ti-shopping-bag"></i> Commandes <span class="nav-badge" id="badge-commandes">12</span></a>
-    <a href="#" class="nav-item"><i class="ti ti-brand-whatsapp"></i> Messages WhatsApp <span class="nav-badge" id="badge-wa">5</span></a>
-    <a href="#" class="nav-item"><i class="ti ti-users"></i> Clients</a>
+    <a class="nav-item active" onclick="goTo('vue-ensemble',this)"><i class="ti ti-layout-dashboard"></i> Vue d'ensemble</a>
+    <a class="nav-item" onclick="goTo('commandes',this)"><i class="ti ti-shopping-bag"></i> Commandes <span class="nav-badge" id="badge-cmd">0</span></a>
+    <a class="nav-item" onclick="goTo('messages',this)"><i class="ti ti-brand-whatsapp"></i> Messages WA <span class="nav-badge" id="badge-wa">0</span></a>
+    <a class="nav-item" onclick="goTo('clients',this)"><i class="ti ti-users"></i> Clients</a>
     <div class="nav-section-label">Catalogue</div>
-    <a href="#" class="nav-item"><i class="ti ti-armchair"></i> Produits</a>
-    <a href="#" class="nav-item"><i class="ti ti-tools"></i> Services</a>
-    <a href="#" class="nav-item"><i class="ti ti-photo"></i> Galerie</a>
+    <a class="nav-item" onclick="goTo('catalogue',this)"><i class="ti ti-armchair"></i> Produits</a>
+    <a class="nav-item" onclick="goTo('services',this)"><i class="ti ti-tools"></i> Services</a>
     <div class="nav-section-label">Autres</div>
     <a href="index.html" class="nav-item" target="_blank"><i class="ti ti-world"></i> Voir le site</a>
-    <a href="#" class="nav-item"><i class="ti ti-settings"></i> Paramètres</a>
   </nav>
   <div class="sidebar-footer">
     <div class="sidebar-user">
@@ -257,62 +307,59 @@
   </div>
 </aside>
 
-<!-- MAIN -->
+<!-- ═══ MAIN ═══ -->
 <div class="main">
   <header class="topbar">
     <div class="topbar-left">
       <button class="hamburger-btn" id="hamburgerBtn"><i class="ti ti-menu-2"></i></button>
       <div>
-        <div class="page-title">Vue d'ensemble</div>
+        <div class="page-title" id="pageTitle">Vue d'ensemble</div>
         <div class="page-date" id="currentDate">—</div>
       </div>
     </div>
     <div class="topbar-right">
       <div class="save-indicator" id="saveIndicator"><i class="ti ti-check"></i> Sauvegardé</div>
-      <button class="topbar-btn" title="Réinitialiser les données" onclick="resetData()" style="color:var(--red)"><i class="ti ti-refresh"></i></button>
-      <button class="topbar-btn"><i class="ti ti-bell"></i><span class="notif-dot"></span></button>
+      <button class="topbar-btn" title="Notifications"><i class="ti ti-bell"></i><span class="notif-dot"></span></button>
       <a href="https://wa.me/2250700000000" target="_blank" class="topbar-wa"><i class="ti ti-brand-whatsapp"></i> WhatsApp</a>
-      <button onclick="logout()" title="Se déconnecter" style="display:flex;align-items:center;gap:.4rem;background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,.2);padding:.45rem 1rem;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .18s" onmouseover="this.style.background='var(--red)';this.style.color='#fff'" onmouseout="this.style.background='var(--red-bg)';this.style.color='var(--red)'">
-        <i class="ti ti-logout"></i> Déconnexion
-      </button>
+      <button class="btn-logout" onclick="logout()"><i class="ti ti-logout"></i> Déconnexion</button>
     </div>
   </header>
 
-  <div class="content">
-
+  <!-- ══════════════════════════════════════════
+       SECTION 1 — VUE D'ENSEMBLE
+  ══════════════════════════════════════════ -->
+  <div class="section active" id="sec-vue-ensemble">
     <!-- KPI -->
     <div class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-icon gold"><i class="ti ti-shopping-cart"></i></div>
         <div class="kpi-label">Commandes ce mois</div>
-        <div class="kpi-value" id="kpi-commandes" onclick="makeEditable(this)" title="Cliquer pour modifier">47</div>
-        <div class="kpi-change up" id="kpi-commandes-change" onclick="makeEditable(this)" title="Cliquer pour modifier"><i class="ti ti-trending-up"></i> +18% vs mois dernier</div>
+        <div class="kpi-value" onclick="editEl(this,'kpis','commandes')" title="Cliquer pour modifier">47</div>
+        <div class="kpi-change up" onclick="editEl(this,'kpis','commandes_ch')" title="Cliquer pour modifier">↑ +18% vs mois dernier</div>
         <div class="edit-hint"><i class="ti ti-pencil" style="font-size:.65rem"></i> Cliquer pour modifier</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-icon green"><i class="ti ti-cash"></i></div>
         <div class="kpi-label">Revenus (FCFA)</div>
-        <div class="kpi-value" id="kpi-revenus" onclick="makeEditable(this)" title="Cliquer pour modifier">3,2M</div>
-        <div class="kpi-change up" id="kpi-revenus-change" onclick="makeEditable(this)" title="Cliquer pour modifier"><i class="ti ti-trending-up"></i> +24% vs mois dernier</div>
+        <div class="kpi-value" onclick="editEl(this,'kpis','revenus')" title="Cliquer pour modifier">3,2M</div>
+        <div class="kpi-change up" onclick="editEl(this,'kpis','revenus_ch')" title="Cliquer pour modifier">↑ +24% vs mois dernier</div>
         <div class="edit-hint"><i class="ti ti-pencil" style="font-size:.65rem"></i> Cliquer pour modifier</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-icon blue"><i class="ti ti-users"></i></div>
         <div class="kpi-label">Nouveaux clients</div>
-        <div class="kpi-value" id="kpi-clients" onclick="makeEditable(this)" title="Cliquer pour modifier">34</div>
-        <div class="kpi-change up" id="kpi-clients-change" onclick="makeEditable(this)" title="Cliquer pour modifier"><i class="ti ti-trending-up"></i> +9% vs mois dernier</div>
+        <div class="kpi-value" onclick="editEl(this,'kpis','clients')" title="Cliquer pour modifier">34</div>
+        <div class="kpi-change up" onclick="editEl(this,'kpis','clients_ch')" title="Cliquer pour modifier">↑ +9% vs mois dernier</div>
         <div class="edit-hint"><i class="ti ti-pencil" style="font-size:.65rem"></i> Cliquer pour modifier</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-icon purple"><i class="ti ti-brand-whatsapp"></i></div>
         <div class="kpi-label">Messages reçus</div>
-        <div class="kpi-value" id="kpi-messages" onclick="makeEditable(this)" title="Cliquer pour modifier">128</div>
-        <div class="kpi-change up" id="kpi-messages-change" onclick="makeEditable(this)" title="Cliquer pour modifier"><i class="ti ti-trending-up"></i> +31% vs mois dernier</div>
+        <div class="kpi-value" onclick="editEl(this,'kpis','messages')" title="Cliquer pour modifier">128</div>
+        <div class="kpi-change up" onclick="editEl(this,'kpis','messages_ch')" title="Cliquer pour modifier">↑ +31% vs mois dernier</div>
         <div class="edit-hint"><i class="ti ti-pencil" style="font-size:.65rem"></i> Cliquer pour modifier</div>
       </div>
     </div>
-
-    <!-- CHART + WA -->
     <div class="grid-2">
       <div class="card">
         <div class="card-header">
@@ -325,530 +372,603 @@
         </div>
         <div class="card-body"><div class="chart-wrap"><canvas id="salesChart"></canvas></div></div>
       </div>
-
       <div class="card">
         <div class="card-header">
-          <span class="card-title">Messages WhatsApp</span>
-          <div class="card-actions">
-            <button class="card-action" onclick="openModal('modal-wa')"><i class="ti ti-plus"></i> Ajouter</button>
-          </div>
+          <span class="card-title">Top Produits</span>
+          <button class="btn btn-sm btn-gold" onclick="goTo('catalogue',document.querySelector('[onclick*=catalogue]'))"><i class="ti ti-arrow-right"></i> Catalogue</button>
         </div>
-        <div class="card-body" style="padding-top:.5rem;padding-bottom:.5rem" id="wa-list"></div>
+        <div class="card-body card-body-flush" id="mini-products" style="padding:.5rem 1.375rem"></div>
       </div>
     </div>
-
-    <!-- COMMANDES + PRODUITS -->
     <div class="grid-3">
-      <div class="card" style="grid-column:span 2">
-        <div class="card-header">
-          <span class="card-title">Commandes récentes</span>
-          <div class="card-actions">
-            <button class="card-action" onclick="openModal('modal-commande')"><i class="ti ti-plus"></i> Nouvelle commande</button>
-          </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="card-header"><span class="card-title">Livraisons</span></div>
+        <div class="card-body card-body-flush" style="padding:.5rem 1.375rem">
+          <div class="mini-stat"><span class="mini-stat-label">Livrées</span><span class="mini-stat-value" style="color:var(--green)">38</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">En cours</span><span class="mini-stat-value" style="color:var(--blue)">6</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">En attente</span><span class="mini-stat-value" style="color:#D97706">3</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Annulées</span><span class="mini-stat-value" style="color:var(--red)">2</span></div>
         </div>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="card-header"><span class="card-title">Revenus / catégorie</span></div>
+        <div class="card-body card-body-flush" style="padding:.5rem 1.375rem">
+          <div class="mini-stat"><span class="mini-stat-label">Lits & Chambres</span><span class="mini-stat-value">1,24M F</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Fauteuils</span><span class="mini-stat-value">780k F</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Tapisserie</span><span class="mini-stat-value">540k F</span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Rideaux</span><span class="mini-stat-value">390k F</span></div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="card-header"><span class="card-title">Zones Abidjan</span></div>
+        <div class="card-body card-body-flush" style="padding:.5rem 1.375rem">
+          <div class="mini-stat"><span class="mini-stat-label">Cocody</span><span class="mini-stat-value"><span class="badge badge-gold">14</span></span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Yopougon</span><span class="mini-stat-value"><span class="badge badge-gold">11</span></span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Marcory</span><span class="mini-stat-value"><span class="badge badge-gold">9</span></span></div>
+          <div class="mini-stat"><span class="mini-stat-label">Plateau</span><span class="mini-stat-value"><span class="badge badge-gold">8</span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 2 — COMMANDES
+  ══════════════════════════════════════════ -->
+  <div class="section" id="sec-commandes">
+    <div class="section-top">
+      <div><div class="section-heading">Commandes</div><div class="section-sub">Gérez toutes vos commandes clients</div></div>
+      <button class="btn btn-gold" onclick="openModal('modal-commande')"><i class="ti ti-plus"></i> Nouvelle commande</button>
+    </div>
+    <div class="card">
+      <div class="card-body card-body-flush">
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>N°</th><th>Client</th><th>Produit</th><th>Montant</th><th>Statut</th><th>Date</th><th></th>
-              </tr>
-            </thead>
+            <thead><tr><th>N°</th><th>Client</th><th>Produit / Service</th><th>Montant</th><th>Statut</th><th>Date</th><th></th></tr></thead>
             <tbody id="orders-tbody"></tbody>
           </table>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div style="display:flex;flex-direction:column;gap:1.25rem">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">Top Produits</span>
-            <button class="card-action" onclick="openModal('modal-product')"><i class="ti ti-plus"></i> Ajouter</button>
-          </div>
-          <div class="card-body" style="padding-top:.5rem;padding-bottom:.5rem" id="products-list"></div>
-        </div>
+  <!-- ══════════════════════════════════════════
+       SECTION 3 — MESSAGES WHATSAPP
+  ══════════════════════════════════════════ -->
+  <div class="section" id="sec-messages">
+    <div class="section-top">
+      <div><div class="section-heading">Messages WhatsApp</div><div class="section-sub">Suivez les demandes de vos clients</div></div>
+      <button class="btn btn-gold" onclick="openModal('modal-wa')"><i class="ti ti-plus"></i> Ajouter un message</button>
+    </div>
+    <div class="card">
+      <div class="card-body" id="wa-list-full"></div>
+    </div>
+  </div>
 
-        <div class="card">
-          <div class="card-header"><span class="card-title">Actions rapides</span></div>
-          <div class="card-body">
-            <div class="actions-grid">
-              <a href="https://wa.me/2250700000000" target="_blank" class="action-btn">
-                <div class="action-icon"><i class="ti ti-brand-whatsapp"></i></div>
-                <div><div class="action-label">WhatsApp</div><div class="action-sub">Ouvrir chat</div></div>
-              </a>
-              <a href="index.html" target="_blank" class="action-btn">
-                <div class="action-icon"><i class="ti ti-world"></i></div>
-                <div><div class="action-label">Voir site</div><div class="action-sub">Page publique</div></div>
-              </a>
-              <button class="action-btn" onclick="openModal('modal-commande')">
-                <div class="action-icon"><i class="ti ti-plus"></i></div>
-                <div><div class="action-label">Nouvelle commande</div><div class="action-sub">Ajouter</div></div>
-              </button>
-              <button class="action-btn" onclick="window.print()">
-                <div class="action-icon"><i class="ti ti-file-analytics"></i></div>
-                <div><div class="action-label">Rapport PDF</div><div class="action-sub">Imprimer</div></div>
-              </button>
-            </div>
-          </div>
+  <!-- ══════════════════════════════════════════
+       SECTION 4 — CLIENTS
+  ══════════════════════════════════════════ -->
+  <div class="section" id="sec-clients">
+    <div class="section-top">
+      <div><div class="section-heading">Clients</div><div class="section-sub">Liste de vos clients enregistrés</div></div>
+      <button class="btn btn-gold" onclick="openModal('modal-client')"><i class="ti ti-plus"></i> Nouveau client</button>
+    </div>
+    <div class="card">
+      <div class="card-body card-body-flush">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>Nom complet</th><th>Téléphone</th><th>Zone</th><th>Commandes</th><th>Statut</th><th></th></tr></thead>
+            <tbody id="clients-tbody"></tbody>
+          </table>
         </div>
       </div>
     </div>
-
   </div>
-</div>
 
-<!-- MODALS -->
+  <!-- ══════════════════════════════════════════
+       SECTION 5 — CATALOGUE (PRODUITS)
+  ══════════════════════════════════════════ -->
+  <div class="section" id="sec-catalogue">
+    <div class="section-top">
+      <div><div class="section-heading">Catalogue Produits</div><div class="section-sub">Cliquez sur un champ pour le modifier directement</div></div>
+      <button class="btn btn-gold" onclick="openModal('modal-produit')"><i class="ti ti-plus"></i> Nouveau produit</button>
+    </div>
+    <div class="catalogue-grid" id="catalogue-grid"></div>
+  </div>
 
-<!-- Modal Nouvelle Commande -->
+  <!-- ══════════════════════════════════════════
+       SECTION 6 — SERVICES
+  ══════════════════════════════════════════ -->
+  <div class="section" id="sec-services">
+    <div class="section-top">
+      <div><div class="section-heading">Services</div><div class="section-sub">Cliquez sur un champ pour le modifier directement</div></div>
+      <button class="btn btn-gold" onclick="openModal('modal-service')"><i class="ti ti-plus"></i> Nouveau service</button>
+    </div>
+    <div class="services-grid" id="services-grid"></div>
+  </div>
+</div><!-- /.main -->
+
+<!-- ══════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════ -->
+
+<!-- Commande -->
 <div class="modal-overlay" id="modal-commande">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-commande')"><i class="ti ti-x"></i></button>
     <div class="modal-title">Nouvelle commande</div>
     <div class="form-row-2">
-      <div class="form-group">
-        <label class="form-label">N° Commande</label>
-        <input class="form-input" id="cmd-id" placeholder="ex: #ME-0048"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Date</label>
-        <input class="form-input" id="cmd-date" type="date"/>
-      </div>
+      <div class="form-group"><label class="form-label">N° Commande</label><input class="form-input" id="cmd-id" placeholder="#ME-0048"/></div>
+      <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="cmd-date" type="date"/></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Nom du client</label>
-      <input class="form-input" id="cmd-client" placeholder="ex: Koné Ibrahim"/>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Produit / Service</label>
-      <input class="form-input" id="cmd-product" placeholder="ex: Fauteuil Club Velours"/>
-    </div>
+    <div class="form-group"><label class="form-label">Nom du client</label><input class="form-input" id="cmd-client" placeholder="Koné Ibrahim"/></div>
+    <div class="form-group"><label class="form-label">Produit / Service</label><input class="form-input" id="cmd-product" placeholder="Fauteuil Club Velours"/></div>
     <div class="form-row-2">
-      <div class="form-group">
-        <label class="form-label">Montant (FCFA)</label>
-        <input class="form-input" id="cmd-price" type="text" placeholder="ex: 85 000"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Statut</label>
+      <div class="form-group"><label class="form-label">Montant (FCFA)</label><input class="form-input" id="cmd-price" placeholder="85 000"/></div>
+      <div class="form-group"><label class="form-label">Statut</label>
         <select class="form-select" id="cmd-status">
-          <option value="warning">En cours</option>
-          <option value="info">Livraison</option>
-          <option value="success">Livré</option>
-          <option value="danger">Annulé</option>
+          <option value="warning">En cours</option><option value="info">Livraison</option>
+          <option value="success">Livré</option><option value="danger">Annulé</option>
         </select>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn-modal-cancel" onclick="closeModal('modal-commande')">Annuler</button>
-      <button class="btn-modal-save" onclick="addOrder()">Enregistrer la commande</button>
-    </div>
+    <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('modal-commande')">Annuler</button><button class="btn-save" onclick="addOrder()">Enregistrer</button></div>
   </div>
 </div>
 
-<!-- Modal Nouveau Produit -->
-<div class="modal-overlay" id="modal-product">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-product')"><i class="ti ti-x"></i></button>
-    <div class="modal-title">Ajouter un produit</div>
-    <div class="form-group">
-      <label class="form-label">Nom du produit</label>
-      <input class="form-input" id="prod-name" placeholder="ex: Fauteuil Club"/>
-    </div>
-    <div class="form-row-2">
-      <div class="form-group">
-        <label class="form-label">Catégorie</label>
-        <input class="form-input" id="prod-cat" placeholder="ex: Salon"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Nombre de ventes</label>
-        <input class="form-input" id="prod-sales" type="number" placeholder="ex: 12"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Icône</label>
-      <select class="form-select" id="prod-icon">
-        <option value="ti-armchair">Fauteuil</option>
-        <option value="ti-bed">Lit</option>
-        <option value="ti-device-tv">Meuble TV</option>
-        <option value="ti-layout-bottombar">Tapis</option>
-        <option value="ti-massage">Matelas</option>
-        <option value="ti-curtain">Rideau</option>
-        <option value="ti-tools">Menuiserie</option>
-        <option value="ti-needle-thread">Tapisserie</option>
-      </select>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-modal-cancel" onclick="closeModal('modal-product')">Annuler</button>
-      <button class="btn-modal-save" onclick="addProduct()">Ajouter le produit</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal WhatsApp Message -->
+<!-- WhatsApp Message -->
 <div class="modal-overlay" id="modal-wa">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-wa')"><i class="ti ti-x"></i></button>
     <div class="modal-title">Nouveau message client</div>
     <div class="form-row-2">
-      <div class="form-group">
-        <label class="form-label">Prénom Nom</label>
-        <input class="form-input" id="wa-name" placeholder="ex: Ama Kouassi"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Heure</label>
-        <input class="form-input" id="wa-time" placeholder="ex: il y a 5 min"/>
-      </div>
+      <div class="form-group"><label class="form-label">Nom du client</label><input class="form-input" id="wa-name" placeholder="Ama Kouassi"/></div>
+      <div class="form-group"><label class="form-label">Heure</label><input class="form-input" id="wa-time" placeholder="il y a 5 min"/></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Message</label>
-      <input class="form-input" id="wa-text" placeholder="ex: Je voudrais commander un fauteuil..."/>
+    <div class="form-group"><label class="form-label">Message</label><input class="form-input" id="wa-text" placeholder="Je voudrais commander..."/></div>
+    <div class="form-group"><label class="form-label">Non lu ?</label>
+      <select class="form-select" id="wa-unread"><option value="1">Oui</option><option value="0">Non</option></select>
     </div>
-    <div class="form-group">
-      <label class="form-label">Non lu ?</label>
-      <select class="form-select" id="wa-unread">
-        <option value="1">Oui (point vert)</option>
-        <option value="0">Non</option>
-      </select>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-modal-cancel" onclick="closeModal('modal-wa')">Annuler</button>
-      <button class="btn-modal-save" onclick="addWaMessage()">Ajouter le message</button>
-    </div>
+    <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('modal-wa')">Annuler</button><button class="btn-save" onclick="addWaMsg()">Ajouter</button></div>
   </div>
 </div>
 
-<!-- Sidebar overlay mobile -->
+<!-- Client -->
+<div class="modal-overlay" id="modal-client">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-client')"><i class="ti ti-x"></i></button>
+    <div class="modal-title">Nouveau client</div>
+    <div class="form-row-2">
+      <div class="form-group"><label class="form-label">Prénom</label><input class="form-input" id="cl-prenom" placeholder="Ama"/></div>
+      <div class="form-group"><label class="form-label">Nom</label><input class="form-input" id="cl-nom" placeholder="Kouassi"/></div>
+    </div>
+    <div class="form-group"><label class="form-label">Téléphone / WhatsApp</label><input class="form-input" id="cl-tel" placeholder="+225 07 XX XX XX XX"/></div>
+    <div class="form-row-2">
+      <div class="form-group"><label class="form-label">Zone / Quartier</label><input class="form-input" id="cl-zone" placeholder="Cocody"/></div>
+      <div class="form-group"><label class="form-label">Nb. commandes</label><input class="form-input" id="cl-cmds" type="number" placeholder="1" min="0"/></div>
+    </div>
+    <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('modal-client')">Annuler</button><button class="btn-save" onclick="addClient()">Enregistrer</button></div>
+  </div>
+</div>
+
+<!-- Produit catalogue -->
+<div class="modal-overlay" id="modal-produit">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-produit')"><i class="ti ti-x"></i></button>
+    <div class="modal-title">Nouveau produit</div>
+    <div class="form-group"><label class="form-label">Nom du produit</label><input class="form-input" id="prod-name" placeholder="Fauteuil Club Velours"/></div>
+    <div class="form-row-2">
+      <div class="form-group"><label class="form-label">Catégorie</label><input class="form-input" id="prod-cat" placeholder="Salon"/></div>
+      <div class="form-group"><label class="form-label">Prix</label><input class="form-input" id="prod-price" placeholder="85 000 FCFA"/></div>
+    </div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="prod-desc" placeholder="Description du produit..."></textarea></div>
+    <div class="form-row-2">
+      <div class="form-group"><label class="form-label">Icône</label>
+        <select class="form-select" id="prod-icon">
+          <option value="ti-armchair">Fauteuil</option><option value="ti-bed">Lit</option>
+          <option value="ti-device-tv">Meuble TV</option><option value="ti-layout-bottombar">Tapis</option>
+          <option value="ti-massage">Matelas</option><option value="ti-curtain">Rideau</option>
+          <option value="ti-tools">Menuiserie</option><option value="ti-needle-thread">Tapisserie</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Statut</label>
+        <select class="form-select" id="prod-status">
+          <option value="1">Disponible</option><option value="0">Indisponible</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('modal-produit')">Annuler</button><button class="btn-save" onclick="addProduit()">Ajouter</button></div>
+  </div>
+</div>
+
+<!-- Service -->
+<div class="modal-overlay" id="modal-service">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-service')"><i class="ti ti-x"></i></button>
+    <div class="modal-title">Nouveau service</div>
+    <div class="form-group"><label class="form-label">Nom du service</label><input class="form-input" id="svc-name" placeholder="Tapisserie fauteuil"/></div>
+    <div class="form-row-2">
+      <div class="form-group"><label class="form-label">Prix / Tarif</label><input class="form-input" id="svc-price" placeholder="À partir de 25 000 FCFA"/></div>
+      <div class="form-group"><label class="form-label">Délai</label><input class="form-input" id="svc-delay" placeholder="48h à 72h"/></div>
+    </div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="svc-desc" placeholder="Décrivez le service..."></textarea></div>
+    <div class="form-group"><label class="form-label">Icône</label>
+      <select class="form-select" id="svc-icon">
+        <option value="ti-needle-thread">Tapisserie</option><option value="ti-tools">Menuiserie</option>
+        <option value="ti-ruler-measure">Sur mesure</option><option value="ti-home-move">Livraison</option>
+        <option value="ti-pencil-ruler">Décoration</option><option value="ti-truck-delivery">Transport</option>
+      </select>
+    </div>
+    <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('modal-service')">Annuler</button><button class="btn-save" onclick="addService()">Ajouter</button></div>
+  </div>
+</div>
+
+<!-- Sidebar overlay -->
 <div id="overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99" onclick="closeSidebar()"></div>
 
 <!-- Toast -->
-<div class="toast" id="toast"><i class="ti ti-check"></i> <span id="toast-msg">Sauvegardé !</span></div>
+<div class="toast" id="toast"><i class="ti ti-check t-ok" id="toast-icon"></i><span id="toast-msg">Sauvegardé</span></div>
 
+<!-- ═══ JAVASCRIPT ═══ -->
 <script>
-/* ===== DATA (localStorage) ===== */
-const KEYS = { orders:'me_orders', products:'me_products', wa:'me_wa', kpis:'me_kpis' };
+/* ────── DATA STORE ────── */
+const K = { orders:'me_orders2', wa:'me_wa2', clients:'me_clients2', catalogue:'me_catalogue2', services:'me_services2', kpis:'me_kpis2' };
+const load = (k,d) => { try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d} };
+const save = (k,d) => localStorage.setItem(k, JSON.stringify(d));
 
-const defaultOrders = [
-  { id:'#ME-0047', client:'Ama Kouassi', product:'Fauteuil Club Velours', price:'85 000 FCFA', status:'warning', statusLabel:'En cours', date:"Aujourd'hui" },
-  { id:'#ME-0046', client:'Mamadou Bamba', product:'Matelas Mémoire 160x200', price:'120 000 FCFA', status:'info', statusLabel:'Livraison', date:'Hier' },
-  { id:'#ME-0045', client:'Geneviève Diallo', product:'Rideaux Velours + pose', price:'65 000 FCFA', status:'success', statusLabel:'Livré', date:'21 juin' },
-  { id:'#ME-0044', client:'Koné Ibrahim', product:'Lit King Size + Tête de lit', price:'280 000 FCFA', status:'success', statusLabel:'Livré', date:'20 juin' },
-  { id:'#ME-0043', client:'Marie Assi', product:'Tapisserie Canapé 3 places', price:'95 000 FCFA', status:'danger', statusLabel:'Annulé', date:'19 juin' },
-];
-const defaultProducts = [
-  { name:'Lits & Têtes de lit', cat:'Chambre', sales:18, icon:'ti-bed' },
-  { name:'Fauteuils', cat:'Salon', sales:14, icon:'ti-armchair' },
-  { name:'Tapis', cat:'Décoration', sales:11, icon:'ti-layout-bottombar' },
-  { name:'Rideaux', cat:'Textile', sales:8, icon:'ti-curtain' },
-];
-const defaultWa = [
-  { name:'Ama Kouassi', text:'Bonjour, je voudrais commander un fauteuil...', time:'il y a 5 min', unread:true },
-  { name:'Mamadou Bamba', text:'Quel est le prix du matelas 160x200 ?', time:'il y a 23 min', unread:true },
-  { name:'Geneviève Diallo', text:'Livraison disponible à Marcory ?', time:'il y a 1h', unread:true },
-  { name:'Sylvie Koffi', text:'Merci pour la livraison rapide 🙏', time:'il y a 3h', unread:false },
-  { name:'Jean-Paul Touré', text:'Vous faites la tapisserie de canapé ?', time:'il y a 5h', unread:true },
-];
+/* Defaults */
+let orders = load(K.orders,[
+  {id:'#ME-0047',client:'Ama Kouassi',product:'Fauteuil Club Velours',price:'85 000 FCFA',status:'warning',statusLabel:'En cours',date:"Aujourd'hui"},
+  {id:'#ME-0046',client:'Mamadou Bamba',product:'Matelas Mémoire 160x200',price:'120 000 FCFA',status:'info',statusLabel:'Livraison',date:'Hier'},
+  {id:'#ME-0045',client:'Geneviève Diallo',product:'Rideaux Velours + pose',price:'65 000 FCFA',status:'success',statusLabel:'Livré',date:'21 juin'},
+  {id:'#ME-0044',client:'Koné Ibrahim',product:'Lit King Size + Tête de lit',price:'280 000 FCFA',status:'success',statusLabel:'Livré',date:'20 juin'},
+  {id:'#ME-0043',client:'Marie Assi',product:'Tapisserie Canapé 3 places',price:'95 000 FCFA',status:'danger',statusLabel:'Annulé',date:'19 juin'},
+]);
+let waMessages = load(K.wa,[
+  {name:'Ama Kouassi',text:'Bonjour, je voudrais commander un fauteuil...',time:'il y a 5 min',unread:true},
+  {name:'Mamadou Bamba',text:'Quel est le prix du matelas 160x200 ?',time:'il y a 23 min',unread:true},
+  {name:'Geneviève Diallo',text:'Livraison disponible à Marcory ?',time:'il y a 1h',unread:true},
+  {name:'Sylvie Koffi',text:'Merci pour la livraison rapide 🙏',time:'il y a 3h',unread:false},
+  {name:'Jean-Paul Touré',text:'Vous faites la tapisserie de canapé ?',time:'il y a 5h',unread:true},
+]);
+let clients = load(K.clients,[
+  {prenom:'Ama',nom:'Kouassi',tel:'+225 07 11 22 33 44',zone:'Cocody',cmds:3,actif:true},
+  {prenom:'Mamadou',nom:'Bamba',tel:'+225 05 44 55 66 77',zone:'Yopougon',cmds:1,actif:true},
+  {prenom:'Geneviève',nom:'Diallo',tel:'+225 01 88 99 00 11',zone:'Marcory',cmds:2,actif:true},
+  {prenom:'Koné',nom:'Ibrahim',tel:'+225 07 22 33 44 55',zone:'Plateau',cmds:4,actif:true},
+]);
+let catalogue = load(K.catalogue,[
+  {name:'Fauteuils',cat:'Salon',price:'45 000 – 150 000 FCFA',desc:'Fauteuils club, scandinaves, pivotants — confort et élégance pour votre salon.',icon:'ti-armchair',dispo:true},
+  {name:'Lits & Têtes de lit',cat:'Chambre',price:'120 000 – 450 000 FCFA',desc:'Cadres en bois massif, lits rembourrés et têtes de lit capitonnées sur mesure.',icon:'ti-bed',dispo:true},
+  {name:'Meubles TV',cat:'Salon',price:'55 000 – 180 000 FCFA',desc:'Consoles basses, buffets et unités murales pour sublimer votre salon.',icon:'ti-device-tv',dispo:true},
+  {name:'Tapis',cat:'Décoration',price:'20 000 – 120 000 FCFA',desc:'Tapis berbères, modernes et orientaux — chaleur et style pour vos espaces.',icon:'ti-layout-bottombar',dispo:true},
+  {name:'Matelas',cat:'Chambre',price:'80 000 – 250 000 FCFA',desc:'Mousse HR, mémoire de forme et latex pour un sommeil réparateur.',icon:'ti-massage',dispo:true},
+  {name:'Rideaux & Stores',cat:'Textile',price:'30 000 – 100 000 FCFA',desc:'Velours, lin, voilage — coupés et posés selon vos dimensions exactes.',icon:'ti-curtain',dispo:true},
+]);
+let services = load(K.services,[
+  {name:'Tapisserie d\'ameublement',price:'À partir de 25 000 FCFA',delay:'48h – 72h',desc:'Réfection de fauteuils, canapés, banquettes, têtes de lit. Tissus haut de gamme : velours, cuir, toile. Nous retendons les ressorts et changeons la mousse.',icon:'ti-needle-thread',actif:true},
+  {name:'Menuiserie sur mesure',price:'Devis gratuit',delay:'5 – 15 jours',desc:'Fabrication de meubles en bois massif, dressings, bibliothèques, cuisines. Chaque pièce façonnée selon vos dimensions et vos envies par nos artisans menuisiers.',icon:'ti-tools',actif:true},
+  {name:'Livraison & Installation',price:'Incluse à Abidjan',delay:'24h – 48h',desc:'Livraison à domicile dans tout Abidjan avec installation complète. Nos équipes prennent soin de chaque pièce jusqu\'à la mise en place dans votre intérieur.',icon:'ti-home-move',actif:true},
+  {name:'Conseil en décoration',price:'Consultation gratuite',delay:'Sur rendez-vous',desc:'Nos conseillers vous accompagnent dans le choix des matières, couleurs et agencements pour un intérieur harmonieux qui vous ressemble.',icon:'ti-pencil-ruler',actif:true},
+]);
 
-function load(key, def) { try { return JSON.parse(localStorage.getItem(key)) || def; } catch(e){ return def; } }
-function save(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
-
-let orders = load(KEYS.orders, defaultOrders);
-let products = load(KEYS.products, defaultProducts);
-let waMessages = load(KEYS.wa, defaultWa);
-
-/* ===== DATE ===== */
-const months = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-const days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+/* ────── DATE ────── */
+const MONTHS=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+const DAYS=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
 const now = new Date();
-document.getElementById('currentDate').textContent = days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+document.getElementById('currentDate').textContent = DAYS[now.getDay()]+' '+now.getDate()+' '+MONTHS[now.getMonth()]+' '+now.getFullYear();
 document.getElementById('cmd-date').value = now.toISOString().split('T')[0];
 
-/* ===== TOAST ===== */
-function showToast(msg, type='success') {
-  const t = document.getElementById('toast');
-  const icon = t.querySelector('i');
-  document.getElementById('toast-msg').textContent = msg;
-  icon.className = type === 'success' ? 'ti ti-check' : 'ti ti-x';
-  t.className = 'toast show' + (type !== 'success' ? ' error' : '');
-  setTimeout(() => t.className = 'toast', 2800);
+/* ────── TOAST ────── */
+function toast(msg, ok=true){
+  document.getElementById('toast-msg').textContent=msg;
+  document.getElementById('toast-icon').className='ti '+(ok?'ti-check t-ok':'ti-x t-err');
+  const t=document.getElementById('toast'); t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+  const si=document.getElementById('saveIndicator'); si.classList.add('show');
+  setTimeout(()=>si.classList.remove('show'),2000);
 }
 
-/* ===== SAVE INDICATOR ===== */
-function flashSaved() {
-  const el = document.getElementById('saveIndicator');
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2000);
-}
-
-/* ===== KPI EDITABLE ===== */
-function makeEditable(el) {
-  el.contentEditable = 'true';
-  el.focus();
-  const range = document.createRange();
-  range.selectNodeContents(el);
-  window.getSelection().removeAllRanges();
-  window.getSelection().addRange(range);
-  el.onblur = () => {
-    el.contentEditable = 'false';
-    saveKPIs();
-    showToast('KPI mis à jour !');
-    flashSaved();
+/* ────── NAVIGATION ────── */
+function goTo(id, navEl) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(navEl) navEl.classList.add('active');
+  const titles={
+    'vue-ensemble':'Vue d\'ensemble','commandes':'Commandes',
+    'messages':'Messages WhatsApp','clients':'Clients',
+    'catalogue':'Catalogue Produits','services':'Services'
   };
-  el.onkeydown = (e) => { if(e.key === 'Enter') { e.preventDefault(); el.blur(); } };
+  document.getElementById('pageTitle').textContent = titles[id]||id;
+  closeSidebar();
+  if(id==='catalogue') renderCatalogue();
+  if(id==='services') renderServices();
+  if(id==='messages') renderWaFull();
+  if(id==='commandes') renderOrders();
+  if(id==='clients') renderClients();
 }
 
-function saveKPIs() {
-  const kpis = {};
-  ['commandes','revenus','clients','messages'].forEach(k => {
-    kpis[k] = document.getElementById('kpi-'+k)?.textContent;
-    kpis[k+'_change'] = document.getElementById('kpi-'+k+'-change')?.textContent;
-  });
-  save(KEYS.kpis, kpis);
+/* ────── INLINE EDIT ────── */
+function editEl(el, storeKey, field) {
+  el.contentEditable='true'; el.focus();
+  const r=document.createRange(); r.selectNodeContents(el);
+  window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+  function done(){
+    el.contentEditable='false';
+    const kpis=load(K.kpis,{}); kpis[field]=el.textContent; save(K.kpis,kpis);
+    toast('Modifié !');
+  }
+  el.onblur=done;
+  el.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();el.blur();}};
+}
+function makeEditable(el, onSave) {
+  el.contentEditable='true'; el.focus();
+  const r=document.createRange(); r.selectNodeContents(el);
+  window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+  el.onblur=()=>{ el.contentEditable='false'; onSave(el.textContent.trim()); toast('Modifié !'); };
+  el.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();el.blur();}};
 }
 
-function loadKPIs() {
-  const kpis = load(KEYS.kpis, null);
-  if (!kpis) return;
-  ['commandes','revenus','clients','messages'].forEach(k => {
-    if (kpis[k]) document.getElementById('kpi-'+k).textContent = kpis[k];
-    if (kpis[k+'_change']) document.getElementById('kpi-'+k+'-change').textContent = kpis[k+'_change'];
-  });
-}
-
-/* ===== STATUS HELPERS ===== */
-const statusMap = { warning:'En cours', info:'Livraison', success:'Livré', danger:'Annulé' };
-const statusOpts = ['warning','info','success','danger'];
-function cycleStatus(btn, idx) {
-  const cur = orders[idx].status;
-  const next = statusOpts[(statusOpts.indexOf(cur) + 1) % statusOpts.length];
-  orders[idx].status = next;
-  orders[idx].statusLabel = statusMap[next];
-  save(KEYS.orders, orders);
-  btn.className = `badge badge-${next}`;
-  btn.textContent = statusMap[next];
-  showToast('Statut mis à jour !');
-  flashSaved();
-}
-
-/* ===== RENDER ORDERS ===== */
-function renderOrders() {
-  const tbody = document.getElementById('orders-tbody');
-  tbody.innerHTML = '';
-  orders.forEach((o, i) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><span class="order-id editable-cell" onclick="editCell(this,${i},'id')">${o.id}</span></td>
-      <td><span class="editable-cell" onclick="editCell(this,${i},'client')">${o.client}</span></td>
-      <td><span class="editable-cell" style="color:var(--muted);font-size:.78rem" onclick="editCell(this,${i},'product')">${o.product}</span></td>
-      <td><span class="order-price editable-cell" onclick="editCell(this,${i},'price')">${o.price}</span></td>
-      <td><span class="badge badge-${o.status}" onclick="cycleStatus(this,${i})" title="Cliquer pour changer le statut">${o.statusLabel}</span></td>
-      <td style="color:var(--muted);font-size:.78rem"><span class="editable-cell" onclick="editCell(this,${i},'date')">${o.date}</span></td>
-      <td>
-        <div class="row-actions">
-          <button class="row-btn del-btn" onclick="deleteOrder(${i})" title="Supprimer"><i class="ti ti-trash"></i></button>
-        </div>
-      </td>`;
-    tbody.appendChild(tr);
+/* ────── ORDERS ────── */
+const statusMap={warning:'En cours',info:'Livraison',success:'Livré',danger:'Annulé'};
+const statusOpts=['warning','info','success','danger'];
+function renderOrders(){
+  const tb=document.getElementById('orders-tbody'); tb.innerHTML='';
+  document.getElementById('badge-cmd').textContent=orders.length;
+  orders.forEach((o,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><span class="editable-cell" onclick="editOrderCell(this,${i},'id')">${o.id}</span></td>
+      <td><span class="editable-cell" onclick="editOrderCell(this,${i},'client')">${o.client}</span></td>
+      <td><span class="editable-cell" style="color:var(--muted);font-size:.78rem" onclick="editOrderCell(this,${i},'product')">${o.product}</span></td>
+      <td><span class="editable-cell" style="font-weight:700" onclick="editOrderCell(this,${i},'price')">${o.price}</span></td>
+      <td><span class="badge badge-${o.status}" onclick="cycleStatus(this,${i})" title="Clic = changer statut">${o.statusLabel}</span></td>
+      <td style="color:var(--muted);font-size:.78rem"><span class="editable-cell" onclick="editOrderCell(this,${i},'date')">${o.date}</span></td>
+      <td><div class="row-actions"><button class="row-btn del-btn" onclick="delOrder(${i})" title="Supprimer"><i class="ti ti-trash"></i></button></div></td>`;
+    tb.appendChild(tr);
   });
 }
-
-function editCell(el, idx, field) {
-  el.contentEditable = 'true';
-  el.focus();
-  const range = document.createRange();
-  range.selectNodeContents(el);
-  window.getSelection().removeAllRanges();
-  window.getSelection().addRange(range);
-  el.onblur = () => {
-    el.contentEditable = 'false';
-    orders[idx][field] = el.textContent;
-    save(KEYS.orders, orders);
-    showToast('Commande mise à jour !');
-    flashSaved();
-  };
-  el.onkeydown = (e) => { if(e.key === 'Enter') { e.preventDefault(); el.blur(); } };
+function editOrderCell(el,i,f){
+  makeEditable(el, v=>{ orders[i][f]=v; save(K.orders,orders); });
+}
+function cycleStatus(btn,i){
+  const next=statusOpts[(statusOpts.indexOf(orders[i].status)+1)%4];
+  orders[i].status=next; orders[i].statusLabel=statusMap[next];
+  save(K.orders,orders);
+  btn.className=`badge badge-${next}`; btn.textContent=statusMap[next];
+  toast('Statut mis à jour !');
+}
+function delOrder(i){
+  if(!confirm(`Supprimer ${orders[i].id} ?`))return;
+  orders.splice(i,1); save(K.orders,orders); renderOrders(); toast('Supprimé');
+}
+function addOrder(){
+  const client=document.getElementById('cmd-client').value.trim();
+  const product=document.getElementById('cmd-product').value.trim();
+  if(!client||!product){toast('Client et produit requis',false);return;}
+  const d=document.getElementById('cmd-date').value;
+  orders.unshift({
+    id:document.getElementById('cmd-id').value.trim()||`#ME-${String(orders.length+48).padStart(4,'0')}`,
+    client,product,
+    price:(document.getElementById('cmd-price').value.trim()||'—')+' FCFA',
+    status:document.getElementById('cmd-status').value,
+    statusLabel:statusMap[document.getElementById('cmd-status').value],
+    date:d?new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}):"Aujourd'hui"
+  });
+  save(K.orders,orders); renderOrders(); closeModal('modal-commande');
+  ['cmd-client','cmd-product','cmd-price','cmd-id'].forEach(id=>document.getElementById(id).value='');
+  toast('Commande ajoutée !');
 }
 
-function deleteOrder(i) {
-  if (!confirm(`Supprimer la commande ${orders[i].id} ?`)) return;
-  orders.splice(i, 1);
-  save(KEYS.orders, orders);
-  renderOrders();
-  showToast('Commande supprimée');
-  flashSaved();
-}
-
-function addOrder() {
-  const id = document.getElementById('cmd-id').value.trim() || `#ME-${String(orders.length+48).padStart(4,'0')}`;
-  const client = document.getElementById('cmd-client').value.trim();
-  const product = document.getElementById('cmd-product').value.trim();
-  const price = document.getElementById('cmd-price').value.trim();
-  const status = document.getElementById('cmd-status').value;
-  const date = document.getElementById('cmd-date').value;
-  if (!client || !product) { showToast('Client et produit requis', 'error'); return; }
-  const dateLabel = date ? new Date(date).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}) : "Aujourd'hui";
-  orders.unshift({ id, client, product, price: price ? price+' FCFA' : '—', status, statusLabel: statusMap[status], date: dateLabel });
-  save(KEYS.orders, orders);
-  renderOrders();
-  closeModal('modal-commande');
-  document.getElementById('cmd-client').value='';
-  document.getElementById('cmd-product').value='';
-  document.getElementById('cmd-price').value='';
-  showToast('Commande ajoutée !');
-  flashSaved();
-}
-
-/* ===== RENDER PRODUCTS ===== */
-function renderProducts() {
-  const list = document.getElementById('products-list');
-  const max = Math.max(...products.map(p=>p.sales), 1);
-  list.innerHTML = products.map((p,i) => `
-    <div class="product-row">
-      <div class="product-thumb"><i class="ti ${p.icon}"></i></div>
-      <div class="product-info">
-        <div class="product-name">${p.name}</div>
-        <div class="product-cat">${p.cat}</div>
-        <div class="progress-bar"><div class="progress-fill" style="width:${Math.round(p.sales/max*100)}%"></div></div>
-      </div>
-      <div class="product-sales">
-        <div class="product-sales-num">${p.sales}</div>
-        <div class="product-sales-lbl">ventes</div>
-      </div>
-      <button class="product-row-del" onclick="deleteProduct(${i})" title="Supprimer"><i class="ti ti-x"></i></button>
-    </div>`).join('');
-}
-
-function addProduct() {
-  const name = document.getElementById('prod-name').value.trim();
-  const cat = document.getElementById('prod-cat').value.trim();
-  const sales = parseInt(document.getElementById('prod-sales').value) || 0;
-  const icon = document.getElementById('prod-icon').value;
-  if (!name) { showToast('Nom du produit requis', 'error'); return; }
-  products.push({ name, cat: cat||'—', sales, icon });
-  save(KEYS.products, products);
-  renderProducts();
-  closeModal('modal-product');
-  document.getElementById('prod-name').value='';
-  document.getElementById('prod-cat').value='';
-  document.getElementById('prod-sales').value='';
-  showToast('Produit ajouté !');
-  flashSaved();
-}
-
-function deleteProduct(i) {
-  if (!confirm(`Supprimer "${products[i].name}" ?`)) return;
-  products.splice(i,1);
-  save(KEYS.products, products);
-  renderProducts();
-  showToast('Produit supprimé');
-  flashSaved();
-}
-
-/* ===== RENDER WA MESSAGES ===== */
-function renderWa() {
-  const list = document.getElementById('wa-list');
-  const unreadCount = waMessages.filter(m=>m.unread).length;
-  document.getElementById('badge-wa').textContent = unreadCount;
-  list.innerHTML = waMessages.map((m,i) => `
+/* ────── WA MESSAGES ────── */
+function initials(name){return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+function renderWaFull(){
+  const list=document.getElementById('wa-list-full');
+  const unread=waMessages.filter(m=>m.unread).length;
+  document.getElementById('badge-wa').textContent=unread||'0';
+  if(!waMessages.length){list.innerHTML='<div class="empty-state"><i class="ti ti-message-circle-off"></i><p>Aucun message pour l\'instant</p></div>';return;}
+  list.innerHTML=waMessages.map((m,i)=>`
     <div class="wa-msg">
-      <div class="wa-avatar">${m.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+      <div class="wa-avatar">${initials(m.name)}</div>
       <div class="wa-content">
         <div class="wa-name">${m.name}</div>
         <div class="wa-text">${m.text}</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.3rem">
         <div class="wa-time">${m.time}</div>
-        ${m.unread ? '<div class="wa-unread"></div>' : ''}
+        ${m.unread?'<div class="wa-unread"></div>':''}
       </div>
-      <button class="wa-del" onclick="deleteWa(${i})" title="Supprimer"><i class="ti ti-x"></i></button>
+      <button class="wa-del" onclick="delWa(${i})" title="Supprimer"><i class="ti ti-x"></i></button>
+    </div>`).join('');
+}
+function addWaMsg(){
+  const name=document.getElementById('wa-name').value.trim();
+  const text=document.getElementById('wa-text').value.trim();
+  if(!name||!text){toast('Nom et message requis',false);return;}
+  waMessages.unshift({name,text,time:document.getElementById('wa-time').value.trim()||'à l\'instant',unread:document.getElementById('wa-unread').value==='1'});
+  save(K.wa,waMessages); renderWaFull(); closeModal('modal-wa');
+  ['wa-name','wa-text','wa-time'].forEach(id=>document.getElementById(id).value='');
+  toast('Message ajouté !');
+}
+function delWa(i){waMessages.splice(i,1);save(K.wa,waMessages);renderWaFull();toast('Supprimé');}
+
+/* ────── CLIENTS ────── */
+function renderClients(){
+  const tb=document.getElementById('clients-tbody'); tb.innerHTML='';
+  if(!clients.length){tb.innerHTML='<tr><td colspan="7"><div class="empty-state"><i class="ti ti-users-off"></i><p>Aucun client enregistré</p></div></td></tr>';return;}
+  clients.forEach((c,i)=>{
+    const av=initials(c.prenom+' '+c.nom);
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><div class="client-avatar">${av}</div></td>
+      <td><span class="editable-cell" onclick="editClientCell(this,${i},'prenom')">${c.prenom}</span> <span class="editable-cell" onclick="editClientCell(this,${i},'nom')">${c.nom}</span></td>
+      <td><a href="https://wa.me/${c.tel.replace(/\s+/g,'')}" target="_blank" style="color:var(--wa);font-size:.8rem">${c.tel}</a></td>
+      <td><span class="editable-cell" onclick="editClientCell(this,${i},'zone')">${c.zone}</span></td>
+      <td><span class="badge badge-gold">${c.cmds} cmd${c.cmds>1?'s':''}</span></td>
+      <td><span class="badge ${c.actif?'badge-success':'badge-danger'}" onclick="toggleClientActif(${i})" title="Cliquer pour changer">${c.actif?'Actif':'Inactif'}</span></td>
+      <td><div class="row-actions"><button class="row-btn del-btn" onclick="delClient(${i})"><i class="ti ti-trash"></i></button></div></td>`;
+    tb.appendChild(tr);
+  });
+}
+function editClientCell(el,i,f){makeEditable(el,v=>{clients[i][f]=v;save(K.clients,clients);});}
+function toggleClientActif(i){clients[i].actif=!clients[i].actif;save(K.clients,clients);renderClients();toast('Statut mis à jour');}
+function delClient(i){if(!confirm('Supprimer ce client ?'))return;clients.splice(i,1);save(K.clients,clients);renderClients();toast('Client supprimé');}
+function addClient(){
+  const prenom=document.getElementById('cl-prenom').value.trim();
+  const nom=document.getElementById('cl-nom').value.trim();
+  if(!prenom||!nom){toast('Prénom et nom requis',false);return;}
+  clients.push({prenom,nom,tel:document.getElementById('cl-tel').value.trim()||'—',zone:document.getElementById('cl-zone').value.trim()||'—',cmds:parseInt(document.getElementById('cl-cmds').value)||0,actif:true});
+  save(K.clients,clients);renderClients();closeModal('modal-client');
+  ['cl-prenom','cl-nom','cl-tel','cl-zone','cl-cmds'].forEach(id=>document.getElementById(id).value='');
+  toast('Client ajouté !');
+}
+
+/* ────── CATALOGUE ────── */
+function renderCatalogue(){
+  const grid=document.getElementById('catalogue-grid'); grid.innerHTML='';
+  if(!catalogue.length){grid.innerHTML='<div class="empty-state"><i class="ti ti-package-off"></i><p>Aucun produit dans le catalogue</p><button class="btn btn-gold" onclick="openModal(\'modal-produit\')">Ajouter un produit</button></div>';return;}
+  catalogue.forEach((p,i)=>{
+    const card=document.createElement('div'); card.className='catalogue-card';
+    card.innerHTML=`
+      <button class="catalogue-del" onclick="delProduit(${i})" title="Supprimer"><i class="ti ti-trash"></i></button>
+      <div class="catalogue-card-img"><i class="ti ${p.icon}"></i>
+        <div class="catalogue-card-status"><span class="badge ${p.dispo?'badge-success':'badge-danger'}" onclick="toggleDispo(${i})" title="Cliquer pour changer">${p.dispo?'Disponible':'Indisponible'}</span></div>
+      </div>
+      <div class="catalogue-card-body">
+        <div class="catalogue-card-name" onclick="editCat(this,${i},'name')">${p.name}</div>
+        <div class="catalogue-card-cat">${p.cat}</div>
+        <div class="catalogue-card-price" onclick="editCat(this,${i},'price')">${p.price}</div>
+        <div class="catalogue-card-desc" onclick="editCat(this,${i},'desc')">${p.desc}</div>
+      </div>
+      <div class="catalogue-card-footer">
+        <span style="font-size:.75rem;color:var(--muted)"><i class="ti ti-pencil" style="font-size:.75rem"></i> Cliquer pour modifier</span>
+        <a href="https://wa.me/2250700000000?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9(e)%20par%20${encodeURIComponent(p.name)}" target="_blank" style="font-size:.75rem;color:var(--wa);font-weight:600;display:flex;align-items:center;gap:.3rem"><i class="ti ti-brand-whatsapp"></i> Commander</a>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+function editCat(el,i,f){makeEditable(el,v=>{catalogue[i][f]=v;save(K.catalogue,catalogue);});}
+function toggleDispo(i){catalogue[i].dispo=!catalogue[i].dispo;save(K.catalogue,catalogue);renderCatalogue();toast('Statut mis à jour');}
+function delProduit(i){if(!confirm(`Supprimer "${catalogue[i].name}" ?`))return;catalogue.splice(i,1);save(K.catalogue,catalogue);renderCatalogue();toast('Produit supprimé');}
+function addProduit(){
+  const name=document.getElementById('prod-name').value.trim();
+  if(!name){toast('Nom requis',false);return;}
+  catalogue.push({name,cat:document.getElementById('prod-cat').value.trim()||'—',price:document.getElementById('prod-price').value.trim()||'Prix sur demande',desc:document.getElementById('prod-desc').value.trim()||'',icon:document.getElementById('prod-icon').value,dispo:document.getElementById('prod-status').value==='1'});
+  save(K.catalogue,catalogue);renderCatalogue();closeModal('modal-produit');
+  ['prod-name','prod-cat','prod-price','prod-desc'].forEach(id=>document.getElementById(id).value='');
+  toast('Produit ajouté !');
+}
+
+/* ────── SERVICES ────── */
+function renderServices(){
+  const grid=document.getElementById('services-grid'); grid.innerHTML='';
+  if(!services.length){grid.innerHTML='<div class="empty-state"><i class="ti ti-tools-off"></i><p>Aucun service configuré</p><button class="btn btn-gold" onclick="openModal(\'modal-service\')">Ajouter un service</button></div>';return;}
+  services.forEach((s,i)=>{
+    const card=document.createElement('div'); card.className='service-card';
+    card.innerHTML=`
+      <button class="service-del" onclick="delService(${i})" title="Supprimer"><i class="ti ti-trash"></i></button>
+      <div class="service-card-header">
+        <div class="service-icon-wrap"><i class="ti ${s.icon}"></i></div>
+        <div style="flex:1;min-width:0">
+          <div class="service-card-name" onclick="editSvc(this,${i},'name')">${s.name}</div>
+          <div class="service-card-price" onclick="editSvc(this,${i},'price')">${s.price}</div>
+        </div>
+      </div>
+      <div class="service-card-body">
+        <div class="service-card-desc" onclick="editSvc(this,${i},'desc')">${s.desc}</div>
+      </div>
+      <div class="service-card-footer">
+        <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--muted)"><i class="ti ti-clock" style="font-size:.85rem"></i><span class="editable-cell" onclick="editSvc(this,${i},'delay')">${s.delay}</span></div>
+        <div class="toggle-wrap">
+          <label class="toggle"><input type="checkbox" ${s.actif?'checked':''} onchange="toggleSvc(${i},this.checked)"><span class="toggle-slider"></span></label>
+          <span>${s.actif?'Actif':'Inactif'}</span>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+function editSvc(el,i,f){makeEditable(el,v=>{services[i][f]=v;save(K.services,services);});}
+function toggleSvc(i,v){services[i].actif=v;save(K.services,services);toast(v?'Service activé':'Service désactivé');}
+function delService(i){if(!confirm(`Supprimer "${services[i].name}" ?`))return;services.splice(i,1);save(K.services,services);renderServices();toast('Service supprimé');}
+function addService(){
+  const name=document.getElementById('svc-name').value.trim();
+  if(!name){toast('Nom requis',false);return;}
+  services.push({name,price:document.getElementById('svc-price').value.trim()||'Sur devis',delay:document.getElementById('svc-delay').value.trim()||'—',desc:document.getElementById('svc-desc').value.trim()||'',icon:document.getElementById('svc-icon').value,actif:true});
+  save(K.services,services);renderServices();closeModal('modal-service');
+  ['svc-name','svc-price','svc-delay','svc-desc'].forEach(id=>document.getElementById(id).value='');
+  toast('Service ajouté !');
+}
+
+/* ────── MINI PRODUCTS (overview) ────── */
+function renderMiniProducts(){
+  const max=Math.max(...catalogue.map(p=>1),1);
+  document.getElementById('mini-products').innerHTML=catalogue.slice(0,5).map((p,i)=>`
+    <div class="product-row">
+      <div class="product-thumb"><i class="ti ${p.icon}"></i></div>
+      <div class="product-info">
+        <div class="product-name-mini">${p.name}</div>
+        <div class="product-cat-mini">${p.cat}</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${Math.max(30,100-(i*15))}%"></div></div>
+      </div>
+      <div class="product-sales">
+        <div class="product-sales-num" style="color:var(--gold)">${p.dispo?'✓':'✗'}</div>
+        <div class="product-sales-lbl">${p.dispo?'Dispo':'Indispo'}</div>
+      </div>
     </div>`).join('');
 }
 
-function addWaMessage() {
-  const name = document.getElementById('wa-name').value.trim();
-  const text = document.getElementById('wa-text').value.trim();
-  const time = document.getElementById('wa-time').value.trim() || 'à l\'instant';
-  const unread = document.getElementById('wa-unread').value === '1';
-  if (!name || !text) { showToast('Nom et message requis', 'error'); return; }
-  waMessages.unshift({ name, text, time, unread });
-  save(KEYS.wa, waMessages);
-  renderWa();
-  closeModal('modal-wa');
-  document.getElementById('wa-name').value='';
-  document.getElementById('wa-text').value='';
-  document.getElementById('wa-time').value='';
-  showToast('Message ajouté !');
-  flashSaved();
-}
+/* ────── MODAL ────── */
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
 
-function deleteWa(i) {
-  waMessages.splice(i,1);
-  save(KEYS.wa, waMessages);
-  renderWa();
-  showToast('Message supprimé');
-  flashSaved();
-}
-
-/* ===== MODAL ===== */
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => { if(e.target === m) m.classList.remove('open'); });
-});
-
-/* ===== RESET ===== */
-function resetData() {
-  if (!confirm('Réinitialiser toutes les données aux valeurs par défaut ?')) return;
-  Object.values(KEYS).forEach(k => localStorage.removeItem(k));
-  location.reload();
-}
-
-/* ===== HAMBURGER ===== */
-document.getElementById('hamburgerBtn').addEventListener('click', () => {
+/* ────── SIDEBAR ────── */
+document.getElementById('hamburgerBtn').addEventListener('click',()=>{
   document.getElementById('sidebar').classList.add('open');
-  document.getElementById('overlay').style.display = 'block';
+  document.getElementById('overlay').style.display='block';
 });
-function closeSidebar() {
+function closeSidebar(){
   document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('overlay').style.display='none';
 }
 
-/* ===== CHART ===== */
-const ctx = document.getElementById('salesChart').getContext('2d');
-const grad = ctx.createLinearGradient(0,0,0,220);
-grad.addColorStop(0,'rgba(184,150,90,.2)');
-grad.addColorStop(1,'rgba(184,150,90,.0)');
-const salesChart = new Chart(ctx,{
-  type:'line',
-  data:{
-    labels:Array.from({length:30},(_,i)=>`${i+1}`),
-    datasets:[{ label:'Commandes', data:[45,52,38,65,70,58,80,72,90,85,95,88,102,98,110,95,88,75,92,108,115,100,88,72,95,110,118,105,98,122], borderColor:'#B8965A', backgroundColor:grad, borderWidth:2.5, tension:.42, fill:true, pointRadius:0, pointHoverRadius:5, pointHoverBackgroundColor:'#B8965A', pointHoverBorderColor:'#fff', pointHoverBorderWidth:2 }]
-  },
-  options:{
-    responsive:true, maintainAspectRatio:false,
-    interaction:{mode:'index',intersect:false},
-    plugins:{ legend:{display:false}, tooltip:{ backgroundColor:'#1A1612', titleColor:'rgba(255,255,255,.6)', bodyColor:'#fff', borderColor:'#B8965A', borderWidth:1, padding:10, callbacks:{label:c=>` ${c.parsed.y} commandes`} } },
-    scales:{ x:{grid:{display:false},ticks:{color:'#7A6E68',font:{size:11},maxTicksLimit:8},border:{display:false}}, y:{grid:{color:'#F0EAE0'},ticks:{color:'#7A6E68',font:{size:11}},border:{display:false}} }
-  }
-});
-
-function setPeriod(p,el) {
-  document.querySelectorAll('.period-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  const ds={ '7j':[12,8,15,10,22,18,25], '30j':[45,52,38,65,70,58,80,72,90,85,95,88,102,98,110,95,88,75,92,108,115,100,88,72,95,110,118,105,98,122], '6m':[280,320,410,380,460,520] };
-  const ls={ '7j':['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'], '30j':Array.from({length:30},(_,i)=>`${i+1}`), '6m':['Jan','Fév','Mar','Avr','Mai','Jun'] };
-  salesChart.data.labels=ls[p]; salesChart.data.datasets[0].data=ds[p]; salesChart.update('active');
-}
-
-/* ===== LOGOUT ===== */
-function logout() {
-  if (!confirm('Voulez-vous vous déconnecter ?')) return;
+/* ────── LOGOUT ────── */
+function logout(){
+  if(!confirm('Voulez-vous vous déconnecter ?'))return;
   localStorage.removeItem('me_auth_session');
   window.location.replace('login.html');
 }
 
-/* ===== INIT ===== */
+/* ────── CHART ────── */
+const ctx=document.getElementById('salesChart').getContext('2d');
+const grad=ctx.createLinearGradient(0,0,0,220);
+grad.addColorStop(0,'rgba(184,150,90,.2)');grad.addColorStop(1,'rgba(184,150,90,.0)');
+const salesChart=new Chart(ctx,{
+  type:'line',
+  data:{labels:Array.from({length:30},(_,i)=>`${i+1}`),datasets:[{label:'Commandes',data:[45,52,38,65,70,58,80,72,90,85,95,88,102,98,110,95,88,75,92,108,115,100,88,72,95,110,118,105,98,122],borderColor:'#B8965A',backgroundColor:grad,borderWidth:2.5,tension:.42,fill:true,pointRadius:0,pointHoverRadius:5,pointHoverBackgroundColor:'#B8965A',pointHoverBorderColor:'#fff',pointHoverBorderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#1A1612',titleColor:'rgba(255,255,255,.6)',bodyColor:'#fff',borderColor:'#B8965A',borderWidth:1,padding:10,callbacks:{label:c=>` ${c.parsed.y} commandes`}}},scales:{x:{grid:{display:false},ticks:{color:'#7A6E68',font:{size:11},maxTicksLimit:8},border:{display:false}},y:{grid:{color:'#F0EAE0'},ticks:{color:'#7A6E68',font:{size:11}},border:{display:false}}}}
+});
+function setPeriod(p,el){
+  document.querySelectorAll('.period-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  const ds={'7j':[12,8,15,10,22,18,25],'30j':[45,52,38,65,70,58,80,72,90,85,95,88,102,98,110,95,88,75,92,108,115,100,88,72,95,110,118,105,98,122],'6m':[280,320,410,380,460,520]};
+  const ls={'7j':['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'],'30j':Array.from({length:30},(_,i)=>`${i+1}`),'6m':['Jan','Fév','Mar','Avr','Mai','Jun']};
+  salesChart.data.labels=ls[p];salesChart.data.datasets[0].data=ds[p];salesChart.update('active');
+}
+
+/* ────── LOAD KPIs ────── */
+function loadKPIs(){
+  const kpis=load(K.kpis,{});
+  const map={commandes:0,commandes_ch:1,revenus:2,revenus_ch:3,clients:4,clients_ch:5,messages:6,messages_ch:7};
+  const els=document.querySelectorAll('.kpi-value, .kpi-change');
+  Object.entries(kpis).forEach(([k,v])=>{if(map[k]!==undefined&&els[map[k]])els[map[k]].textContent=v;});
+}
+
+/* ────── INIT ────── */
 loadKPIs();
 renderOrders();
-renderProducts();
-renderWa();
+renderWaFull();
+renderClients();
+renderMiniProducts();
 </script>
 </body>
 </html>
