@@ -150,9 +150,15 @@
     .catalogue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}
     .catalogue-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .25s;position:relative}
     .catalogue-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.1);border-color:var(--gold)}
-    .catalogue-card-img{aspect-ratio:4/3;background:var(--bg);display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--border)}
-    .catalogue-card-img i{font-size:3.5rem;color:var(--gold);opacity:.5}
-    .catalogue-card-status{position:absolute;top:.75rem;right:.75rem}
+    .catalogue-card-img{aspect-ratio:4/3;background:var(--bg);display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--border);overflow:hidden}
+    .catalogue-card-img i.card-icon{font-size:3.5rem;color:var(--gold);opacity:.5}
+    .catalogue-card-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+    .catalogue-card-status{position:absolute;top:.75rem;right:.75rem;z-index:2}
+    .catalogue-img-upload{position:absolute;bottom:.75rem;left:50%;transform:translateX(-50%);z-index:2;background:rgba(26,22,18,.7);color:#fff;border:none;border-radius:20px;padding:.35rem .85rem;font-size:.72rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:.35rem;white-space:nowrap;transition:background .18s;backdrop-filter:blur(4px)}
+    .catalogue-img-upload:hover{background:var(--gold)}
+    .catalogue-img-upload i{font-size:.85rem}
+    .catalogue-card-img-del{position:absolute;top:.75rem;left:.75rem;z-index:2;width:26px;height:26px;border-radius:6px;background:rgba(239,68,68,.85);border:none;color:#fff;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:.8rem}
+    .catalogue-card-img:hover .catalogue-card-img-del{display:flex}
     .catalogue-card-body{padding:1.125rem}
     .catalogue-card-name{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:.35rem;cursor:pointer;border-radius:4px;transition:background .15s;padding:.1rem .25rem}
     .catalogue-card-name:hover{background:var(--gold-pale)}
@@ -576,6 +582,14 @@
         </select>
       </div>
     </div>
+    <div class="form-group">
+      <label class="form-label">Photo du produit (optionnel)</label>
+      <div style="border:2px dashed var(--border);border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;transition:border-color .18s" onclick="document.getElementById('prod-img-input').click()" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'">
+        <img id="prod-img-preview" src="" alt="" style="display:none;max-height:140px;border-radius:8px;margin-bottom:.75rem;object-fit:cover;width:100%"/>
+        <div id="prod-img-placeholder" style="color:var(--muted);font-size:.85rem"><i class="ti ti-photo-up" style="font-size:2rem;display:block;margin-bottom:.5rem;color:var(--gold)"></i>Cliquer pour ajouter une photo</div>
+        <input type="file" id="prod-img-input" accept="image/*" style="display:none" onchange="previewProdImg(this)"/>
+      </div>
+    </div>
     <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('modal-produit')">Annuler</button><button class="btn-save" onclick="addProduit()">Ajouter</button></div>
   </div>
 </div>
@@ -831,8 +845,11 @@ function renderCatalogue(){
     const card=document.createElement('div'); card.className='catalogue-card';
     card.innerHTML=`
       <button class="catalogue-del" onclick="delProduit(${i})" title="Supprimer"><i class="ti ti-trash"></i></button>
-      <div class="catalogue-card-img"><i class="ti ${p.icon}"></i>
+      <div class="catalogue-card-img">
+        ${p.img?`<img src="${p.img}" alt="${p.name}"/><button class="catalogue-card-img-del" onclick="delProduitImg(${i})" title="Supprimer la photo"><i class="ti ti-x"></i></button>`:`<i class="ti ${p.icon} card-icon"></i>`}
         <div class="catalogue-card-status"><span class="badge ${p.dispo?'badge-success':'badge-danger'}" onclick="toggleDispo(${i})" title="Cliquer pour changer">${p.dispo?'Disponible':'Indisponible'}</span></div>
+        <input type="file" accept="image/*" id="img-input-${i}" style="display:none" onchange="handleProduitImg(${i},this)"/>
+        <button class="catalogue-img-upload" onclick="document.getElementById('img-input-${i}').click()"><i class="ti ti-camera"></i>${p.img?'Changer la photo':'Ajouter une photo'}</button>
       </div>
       <div class="catalogue-card-body">
         <div class="catalogue-card-name" onclick="editCat(this,${i},'name')">${p.name}</div>
@@ -850,13 +867,40 @@ function renderCatalogue(){
 function editCat(el,i,f){makeEditable(el,v=>{catalogue[i][f]=v;save(K.catalogue,catalogue);});}
 function toggleDispo(i){catalogue[i].dispo=!catalogue[i].dispo;save(K.catalogue,catalogue);renderCatalogue();toast('Statut mis à jour');}
 function delProduit(i){if(!confirm(`Supprimer "${catalogue[i].name}" ?`))return;catalogue.splice(i,1);save(K.catalogue,catalogue);renderCatalogue();toast('Produit supprimé');}
+function previewProdImg(input){
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const preview=document.getElementById('prod-img-preview');
+    preview.src=e.target.result; preview.style.display='block';
+    document.getElementById('prod-img-placeholder').style.display='none';
+  };
+  reader.readAsDataURL(file);
+}
+function handleProduitImg(i,input){
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{catalogue[i].img=e.target.result;save(K.catalogue,catalogue);renderCatalogue();toast('Photo ajoutée !');};
+  reader.readAsDataURL(file);
+}
+function delProduitImg(i){catalogue[i].img=null;save(K.catalogue,catalogue);renderCatalogue();toast('Photo supprimée');}
 function addProduit(){
   const name=document.getElementById('prod-name').value.trim();
   if(!name){toast('Nom requis',false);return;}
-  catalogue.push({name,cat:document.getElementById('prod-cat').value.trim()||'—',price:document.getElementById('prod-price').value.trim()||'Prix sur demande',desc:document.getElementById('prod-desc').value.trim()||'',icon:document.getElementById('prod-icon').value,dispo:document.getElementById('prod-status').value==='1'});
-  save(K.catalogue,catalogue);renderCatalogue();closeModal('modal-produit');
+  const fileInput=document.getElementById('prod-img-input');
+  const file=fileInput&&fileInput.files[0];
+  const newProd={name,cat:document.getElementById('prod-cat').value.trim()||'—',price:document.getElementById('prod-price').value.trim()||'Prix sur demande',desc:document.getElementById('prod-desc').value.trim()||'',icon:document.getElementById('prod-icon').value,dispo:document.getElementById('prod-status').value==='1',img:null};
+  if(file){
+    const reader=new FileReader();
+    reader.onload=e=>{newProd.img=e.target.result;catalogue.push(newProd);save(K.catalogue,catalogue);renderCatalogue();toast('Produit ajouté !');};
+    reader.readAsDataURL(file);
+  } else {
+    catalogue.push(newProd);save(K.catalogue,catalogue);renderCatalogue();toast('Produit ajouté !');
+  }
+  closeModal('modal-produit');
   ['prod-name','prod-cat','prod-price','prod-desc'].forEach(id=>document.getElementById(id).value='');
-  toast('Produit ajouté !');
+  if(fileInput)fileInput.value='';
+  document.getElementById('prod-img-preview').style.display='none';
 }
 
 /* ────── SERVICES ────── */
