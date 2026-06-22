@@ -7,6 +7,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    /* Vérification session — rediriger vers login si non connecté */
+    (function() {
+      try {
+        const s = JSON.parse(localStorage.getItem('me_auth_session'));
+        if (!s || Date.now() >= s.expires) {
+          window.location.replace('login.html');
+        }
+      } catch(e) { window.location.replace('login.html'); }
+    })();
+  </script>
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     :root{
@@ -258,9 +269,12 @@
     </div>
     <div class="topbar-right">
       <div class="save-indicator" id="saveIndicator"><i class="ti ti-check"></i> Sauvegardé</div>
-      <button class="topbar-btn" title="Réinitialiser" onclick="resetData()" style="color:var(--red)"><i class="ti ti-refresh"></i></button>
+      <button class="topbar-btn" title="Réinitialiser les données" onclick="resetData()" style="color:var(--red)"><i class="ti ti-refresh"></i></button>
       <button class="topbar-btn"><i class="ti ti-bell"></i><span class="notif-dot"></span></button>
       <a href="https://wa.me/2250700000000" target="_blank" class="topbar-wa"><i class="ti ti-brand-whatsapp"></i> WhatsApp</a>
+      <button onclick="logout()" title="Se déconnecter" style="display:flex;align-items:center;gap:.4rem;background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,.2);padding:.45rem 1rem;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .18s" onmouseover="this.style.background='var(--red)';this.style.color='#fff'" onmouseout="this.style.background='var(--red-bg)';this.style.color='var(--red)'">
+        <i class="ti ti-logout"></i> Déconnexion
+      </button>
     </div>
   </header>
 
@@ -821,6 +835,13 @@ function setPeriod(p,el) {
   const ds={ '7j':[12,8,15,10,22,18,25], '30j':[45,52,38,65,70,58,80,72,90,85,95,88,102,98,110,95,88,75,92,108,115,100,88,72,95,110,118,105,98,122], '6m':[280,320,410,380,460,520] };
   const ls={ '7j':['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'], '30j':Array.from({length:30},(_,i)=>`${i+1}`), '6m':['Jan','Fév','Mar','Avr','Mai','Jun'] };
   salesChart.data.labels=ls[p]; salesChart.data.datasets[0].data=ds[p]; salesChart.update('active');
+}
+
+/* ===== LOGOUT ===== */
+function logout() {
+  if (!confirm('Voulez-vous vous déconnecter ?')) return;
+  localStorage.removeItem('me_auth_session');
+  window.location.replace('login.html');
 }
 
 /* ===== INIT ===== */

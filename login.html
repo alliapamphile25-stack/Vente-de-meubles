@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MaisonElite — Connexion Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --gold:#B8965A;--gold-lt:#D4B07A;--gold-pale:#FBF5EB;
+      --dark:#1A1612;--dark2:#2C2520;
+      --white:#FFFFFF;--border:#E5DDD5;--muted:#7A6E68;
+      --red:#EF4444;--red-bg:#FEF2F2;
+    }
+    html,body{height:100%;font-family:'Inter',sans-serif}
+    body{
+      display:flex;align-items:center;justify-content:center;
+      min-height:100vh;position:relative;overflow:hidden;
+      background:#1A1612;
+    }
+
+    /* Background pattern */
+    .bg-pattern{
+      position:absolute;inset:0;
+      background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23B8965A' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .bg-glow{
+      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+      width:600px;height:600px;border-radius:50%;
+      background:radial-gradient(circle,rgba(184,150,90,.08) 0%,transparent 70%);
+      pointer-events:none;
+    }
+
+    /* Card */
+    .login-card{
+      position:relative;z-index:1;
+      background:rgba(255,255,255,.97);
+      border-radius:20px;padding:2.75rem 2.5rem;
+      width:100%;max-width:420px;margin:1rem;
+      box-shadow:0 32px 80px rgba(0,0,0,.4);
+    }
+
+    /* Header */
+    .login-header{text-align:center;margin-bottom:2.25rem}
+    .login-logo{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:64px;height:64px;background:var(--dark);border-radius:16px;
+      margin-bottom:1.25rem;
+    }
+    .login-logo i{font-size:1.75rem;color:var(--gold)}
+    .login-title{
+      font-family:'Playfair Display',serif;font-size:1.6rem;
+      font-weight:700;color:var(--dark);margin-bottom:.35rem;
+    }
+    .login-title span{color:var(--gold)}
+    .login-subtitle{font-size:.85rem;color:var(--muted)}
+
+    /* Form */
+    .form-group{margin-bottom:1.25rem}
+    .form-label{
+      display:flex;align-items:center;gap:.35rem;
+      font-size:.75rem;font-weight:600;color:var(--muted);
+      text-transform:uppercase;letter-spacing:.09em;margin-bottom:.5rem;
+    }
+    .input-wrap{position:relative}
+    .form-input{
+      width:100%;padding:.8rem 1rem .8rem 2.75rem;
+      border:1.5px solid var(--border);border-radius:10px;
+      font-family:'Inter',sans-serif;font-size:.9rem;color:var(--dark);
+      outline:none;transition:border-color .2s,box-shadow .2s;
+      background:var(--white);
+    }
+    .form-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,150,90,.12)}
+    .form-input.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(239,68,68,.1)}
+    .input-icon{
+      position:absolute;left:.875rem;top:50%;transform:translateY(-50%);
+      color:var(--muted);font-size:1.05rem;pointer-events:none;
+    }
+    .toggle-pw{
+      position:absolute;right:.875rem;top:50%;transform:translateY(-50%);
+      background:none;border:none;cursor:pointer;color:var(--muted);
+      font-size:1rem;padding:.2rem;transition:color .18s;
+    }
+    .toggle-pw:hover{color:var(--dark)}
+
+    /* Error */
+    .error-msg{
+      display:none;align-items:center;gap:.4rem;
+      background:var(--red-bg);border:1px solid rgba(239,68,68,.2);
+      border-radius:8px;padding:.65rem .9rem;margin-bottom:1.25rem;
+      font-size:.82rem;color:var(--red);font-weight:500;
+    }
+    .error-msg.show{display:flex}
+
+    /* Btn */
+    .btn-login{
+      width:100%;padding:.9rem;background:var(--dark);color:#fff;
+      border:none;border-radius:10px;font-family:'Inter',sans-serif;
+      font-size:.9rem;font-weight:600;cursor:pointer;
+      transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;
+      letter-spacing:.02em;
+    }
+    .btn-login:hover{background:var(--dark2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+    .btn-login:active{transform:translateY(0)}
+    .btn-login.loading{pointer-events:none;opacity:.8}
+
+    /* Hint */
+    .login-hint{
+      text-align:center;margin-top:1.5rem;
+      font-size:.78rem;color:var(--muted);
+      display:flex;align-items:center;justify-content:center;gap:.4rem;
+    }
+    .login-hint i{font-size:.85rem;color:var(--gold)}
+
+    /* Shake animation */
+    @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+    .shake{animation:shake .4s ease}
+
+    /* Back to site link */
+    .back-link{
+      display:flex;align-items:center;justify-content:center;gap:.4rem;
+      margin-top:1.25rem;font-size:.8rem;color:var(--muted);
+      text-decoration:none;transition:color .18s;
+    }
+    .back-link:hover{color:var(--gold)}
+  </style>
+</head>
+<body>
+  <div class="bg-pattern"></div>
+  <div class="bg-glow"></div>
+
+  <div class="login-card" id="loginCard">
+    <div class="login-header">
+      <div class="login-logo"><i class="ti ti-layout-dashboard" aria-hidden="true"></i></div>
+      <h1 class="login-title">Maison<span>Elite</span></h1>
+      <p class="login-subtitle">Accès réservé à l'administrateur</p>
+    </div>
+
+    <form id="loginForm" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="username">
+          <i class="ti ti-user" aria-hidden="true"></i> Identifiant
+        </label>
+        <div class="input-wrap">
+          <i class="ti ti-user input-icon" aria-hidden="true"></i>
+          <input class="form-input" type="text" id="username"
+            placeholder="admin" autocomplete="username" required/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">
+          <i class="ti ti-lock" aria-hidden="true"></i> Mot de passe
+        </label>
+        <div class="input-wrap">
+          <i class="ti ti-lock input-icon" aria-hidden="true"></i>
+          <input class="form-input" type="password" id="password"
+            placeholder="••••••••" autocomplete="current-password" required/>
+          <button type="button" class="toggle-pw" id="togglePw" aria-label="Afficher/masquer">
+            <i class="ti ti-eye" id="eyeIcon" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="error-msg" id="errorMsg">
+        <i class="ti ti-alert-circle" aria-hidden="true"></i>
+        <span id="errorText">Identifiant ou mot de passe incorrect.</span>
+      </div>
+
+      <button type="submit" class="btn-login" id="loginBtn">
+        <i class="ti ti-login" aria-hidden="true"></i>
+        Se connecter
+      </button>
+    </form>
+
+    <div class="login-hint">
+      <i class="ti ti-shield-lock" aria-hidden="true"></i>
+      Accès sécurisé — Zone privée
+    </div>
+
+    <a href="index.html" class="back-link">
+      <i class="ti ti-arrow-left" aria-hidden="true"></i>
+      Retour au site
+    </a>
+  </div>
+
+  <script>
+    /* ===== IDENTIFIANTS ===== */
+    /* Pour changer : modifiez USERNAME et PASSWORD ci-dessous */
+    const CREDENTIALS = {
+      username: 'admin',
+      password: 'maisonelite2026'
+    };
+    const SESSION_KEY = 'me_auth_session';
+    const SESSION_DURATION = 8 * 60 * 60 * 1000; /* 8 heures */
+
+    /* Si déjà connecté → rediriger vers dashboard */
+    (function checkSession() {
+      try {
+        const s = JSON.parse(localStorage.getItem(SESSION_KEY));
+        if (s && Date.now() < s.expires) {
+          window.location.replace('dashboard.html');
+        }
+      } catch(e) {}
+    })();
+
+    /* Toggle mot de passe */
+    document.getElementById('togglePw').addEventListener('click', () => {
+      const pw = document.getElementById('password');
+      const icon = document.getElementById('eyeIcon');
+      if (pw.type === 'password') {
+        pw.type = 'text';
+        icon.className = 'ti ti-eye-off';
+      } else {
+        pw.type = 'password';
+        icon.className = 'ti ti-eye';
+      }
+    });
+
+    /* Tentatives échouées */
+    let attempts = 0;
+
+    /* Soumission */
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('loginBtn');
+      const errorMsg = document.getElementById('errorMsg');
+      const errorText = document.getElementById('errorText');
+      const card = document.getElementById('loginCard');
+
+      /* Blocage après 5 tentatives */
+      if (attempts >= 5) {
+        errorMsg.classList.add('show');
+        errorText.textContent = 'Trop de tentatives. Veuillez réessayer dans 1 minute.';
+        return;
+      }
+
+      /* Loading */
+      btn.classList.add('loading');
+      btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Vérification...';
+
+      setTimeout(() => {
+        if (username === CREDENTIALS.username && password === CREDENTIALS.password) {
+          /* Succès */
+          const session = { user: username, expires: Date.now() + SESSION_DURATION };
+          localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+          btn.innerHTML = '<i class="ti ti-check"></i> Connexion réussie !';
+          btn.style.background = '#22C55E';
+          setTimeout(() => window.location.replace('dashboard.html'), 600);
+        } else {
+          /* Échec */
+          attempts++;
+          errorMsg.classList.add('show');
+          const remaining = 5 - attempts;
+          errorText.textContent = remaining > 0
+            ? `Identifiant ou mot de passe incorrect. (${remaining} tentative${remaining > 1 ? 's' : ''} restante${remaining > 1 ? 's' : ''})`
+            : 'Compte temporairement bloqué.';
+          document.getElementById('username').classList.add('error');
+          document.getElementById('password').classList.add('error');
+          document.getElementById('password').value = '';
+          card.classList.add('shake');
+          card.addEventListener('animationend', () => card.classList.remove('shake'), { once: true });
+          btn.classList.remove('loading');
+          btn.innerHTML = '<i class="ti ti-login"></i> Se connecter';
+          btn.style.background = '';
+        }
+      }, 800);
+    });
+
+    /* Nettoyer les erreurs en tapant */
+    ['username','password'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        document.getElementById(id).classList.remove('error');
+        document.getElementById('errorMsg').classList.remove('show');
+      });
+    });
+
+    /* Animation spin */
+    const style = document.createElement('style');
+    style.textContent = '@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}';
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
