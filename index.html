@@ -1167,9 +1167,14 @@
       const wa = c.wa || '2250700000000';
       const waUrl = 'https://wa.me/' + wa;
 
-      // WhatsApp
+      // Tous les liens WhatsApp de la page
+      document.querySelectorAll('a[href*="wa.me/"]').forEach(a => {
+        a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + wa);
+      });
+
+      // WhatsApp contact info label
       const waLink = document.getElementById('ci-wa-link');
-      if (waLink) { waLink.href = waUrl; waLink.textContent = c.tel || ('+' + wa); }
+      if (waLink) { waLink.textContent = c.tel || ('+' + wa); }
 
       // Téléphone
       const telLink = document.getElementById('ci-tel-link');
