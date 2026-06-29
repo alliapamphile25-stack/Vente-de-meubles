@@ -83,6 +83,12 @@
       box-shadow: 0 4px 18px rgba(37,211,102,.28);
     }
     .btn-wa:hover { background: var(--wa-dk); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,.38); }
+    .social-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;border-radius:8px;font-size:.8rem;font-weight:600;text-decoration:none;transition:all .18s;color:#fff}
+    .social-btn:hover{transform:translateY(-2px);opacity:.9}
+    .social-btn.fb{background:#1877F2}
+    .social-btn.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+    .social-btn.tt{background:#010101;border:1px solid rgba(255,255,255,.15)}
+    .social-btn.li{background:#0A66C2}
     .btn-wa-outline {
       background: transparent; color: var(--wa);
       border: 1.5px solid var(--wa);
@@ -968,43 +974,46 @@
         <h2 class="section-title reveal-left">Parlons de<br>votre projet</h2>
         <p class="section-subtitle reveal-left" style="color:rgba(255,255,255,.55);margin-bottom:2.5rem">Réponse garantie sous 1h sur WhatsApp. Devis gratuit, sans engagement.</p>
 
-        <div class="contact-info-item reveal-left">
+        <div class="contact-info-item reveal-left" id="ci-wa">
           <div class="contact-icon"><i class="ti ti-brand-whatsapp" aria-hidden="true"></i></div>
           <div>
             <div class="contact-lbl">WhatsApp (principal)</div>
-            <div class="contact-val"><a href="https://wa.me/2250700000000">+225 07 00 00 00 00</a></div>
+            <div class="contact-val"><a id="ci-wa-link" href="https://wa.me/2250700000000">+225 07 00 00 00 00</a></div>
           </div>
         </div>
         <div class="contact-info-item reveal-left" style="transition-delay:.08s">
           <div class="contact-icon"><i class="ti ti-phone" aria-hidden="true"></i></div>
           <div>
             <div class="contact-lbl">Téléphone</div>
-            <div class="contact-val"><a href="tel:+2250700000000">+225 07 00 00 00 00</a></div>
+            <div class="contact-val"><a id="ci-tel-link" href="tel:+2250700000000">+225 07 00 00 00 00</a></div>
           </div>
         </div>
         <div class="contact-info-item reveal-left" style="transition-delay:.16s">
           <div class="contact-icon"><i class="ti ti-mail" aria-hidden="true"></i></div>
           <div>
             <div class="contact-lbl">Email</div>
-            <div class="contact-val"><a href="mailto:contact@maisonelite.ci">contact@maisonelite.ci</a></div>
+            <div class="contact-val"><a id="ci-email-link" href="mailto:contact@maisonelite.ci">contact@maisonelite.ci</a></div>
           </div>
         </div>
         <div class="contact-info-item reveal-left" style="transition-delay:.24s">
           <div class="contact-icon"><i class="ti ti-map-pin" aria-hidden="true"></i></div>
           <div>
             <div class="contact-lbl">Localisation</div>
-            <div class="contact-val">Abidjan, Côte d'Ivoire<br>Livraison dans tout Abidjan</div>
+            <div class="contact-val" id="ci-adresse">Abidjan, Côte d'Ivoire<br>Livraison dans tout Abidjan</div>
           </div>
         </div>
         <div class="contact-info-item reveal-left" style="transition-delay:.32s">
           <div class="contact-icon"><i class="ti ti-clock" aria-hidden="true"></i></div>
           <div>
             <div class="contact-lbl">Disponibilité</div>
-            <div class="contact-val">Tous les jours — 7h à 21h<br>WhatsApp : 24h/24, 7j/7</div>
+            <div class="contact-val" id="ci-horaires">Tous les jours — 7h à 21h<br>WhatsApp : 24h/24, 7j/7</div>
           </div>
         </div>
 
-        <a href="https://wa.me/2250700000000?text=Bonjour%20MaisonElite%2C%20je%20souhaite%20obtenir%20un%20devis." class="btn btn-wa reveal-left" style="margin-top:1rem;transition-delay:.4s">
+        <!-- Réseaux sociaux -->
+        <div id="social-links" style="display:flex;gap:.625rem;flex-wrap:wrap;margin-top:1.25rem"></div>
+
+        <a id="btn-wa-cta" href="https://wa.me/2250700000000?text=Bonjour%20MaisonElite%2C%20je%20souhaite%20obtenir%20un%20devis." class="btn btn-wa reveal-left" style="margin-top:1rem;transition-delay:.4s">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Écrire sur WhatsApp maintenant
         </a>
@@ -1149,6 +1158,60 @@
       }
     });
   });
+
+  /* --- Sync contact depuis le dashboard (localStorage) --- */
+  (function syncContact() {
+    try {
+      const c = JSON.parse(localStorage.getItem('me_contact2'));
+      if (!c) return;
+      const wa = c.wa || '2250700000000';
+      const waUrl = 'https://wa.me/' + wa;
+
+      // WhatsApp
+      const waLink = document.getElementById('ci-wa-link');
+      if (waLink) { waLink.href = waUrl; waLink.textContent = c.tel || ('+' + wa); }
+
+      // Téléphone
+      const telLink = document.getElementById('ci-tel-link');
+      if (telLink && c.tel) { telLink.href = 'tel:' + c.tel.replace(/\s/g,''); telLink.textContent = c.tel; }
+
+      // Email
+      const emailLink = document.getElementById('ci-email-link');
+      if (emailLink && c.email) { emailLink.href = 'mailto:' + c.email; emailLink.textContent = c.email; }
+
+      // Adresse
+      const adr = document.getElementById('ci-adresse');
+      if (adr && c.adresse) adr.textContent = c.adresse;
+
+      // Horaires
+      const hor = document.getElementById('ci-horaires');
+      if (hor && c.horaires) hor.textContent = c.horaires;
+
+      // CTA sous-titre
+      const cta = document.querySelector('#contact .section-subtitle');
+      if (cta && c.cta) cta.textContent = c.cta;
+
+      // Bouton WhatsApp principal
+      const btnWa = document.getElementById('btn-wa-cta');
+      if (btnWa) btnWa.href = waUrl + '?text=' + encodeURIComponent('Bonjour MaisonElite, je souhaite obtenir un devis.');
+
+      // Réseaux sociaux
+      const socialWrap = document.getElementById('social-links');
+      if (socialWrap) {
+        const socials = [
+          { key:'facebook',  cls:'fb', icon:'ti-brand-facebook',  label:'Facebook'  },
+          { key:'instagram', cls:'ig', icon:'ti-brand-instagram',  label:'Instagram' },
+          { key:'tiktok',    cls:'tt', icon:'ti-brand-tiktok',     label:'TikTok'    },
+          { key:'linkedin',  cls:'li', icon:'ti-brand-linkedin',   label:'LinkedIn'  },
+        ];
+        socialWrap.innerHTML = socials.filter(s => c[s.key]).map(s =>
+          `<a href="${c[s.key]}" target="_blank" rel="noopener" class="social-btn ${s.cls}">
+             <i class="ti ${s.icon}"></i>${s.label}
+           </a>`
+        ).join('');
+      }
+    } catch(e) {}
+  })();
 
   /* --- Sync produits & services depuis le dashboard (localStorage) --- */
   (function syncFromDashboard() {

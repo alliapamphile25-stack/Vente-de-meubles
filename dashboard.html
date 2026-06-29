@@ -303,6 +303,7 @@
     <a class="nav-item" onclick="goTo('catalogue',this)"><i class="ti ti-armchair"></i> Produits</a>
     <a class="nav-item" onclick="goTo('services',this)"><i class="ti ti-tools"></i> Services</a>
     <div class="nav-section-label">Autres</div>
+    <a class="nav-item" onclick="goTo('parametres',this)"><i class="ti ti-settings"></i> Paramètres</a>
     <a href="index.html" class="nav-item" target="_blank"><i class="ti ti-world"></i> Voir le site</a>
   </nav>
   <div class="sidebar-footer">
@@ -491,6 +492,84 @@
     </div>
     <div class="services-grid" id="services-grid"></div>
   </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 7 — PARAMÈTRES CONTACT
+  ══════════════════════════════════════════ -->
+  <div class="section" id="sec-parametres">
+    <div class="section-top">
+      <div><div class="section-heading">Paramètres</div><div class="section-sub">Modifiez les informations de contact et les réseaux sociaux affichés sur le site</div></div>
+      <button class="btn btn-gold" onclick="saveContact()"><i class="ti ti-device-floppy"></i> Sauvegarder</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(480px,1fr));gap:1.25rem">
+
+      <!-- Contacts principaux -->
+      <div class="card">
+        <div class="card-header"><span class="card-title"><i class="ti ti-address-book" style="color:var(--gold)"></i> Contacts principaux</span></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:1rem">
+          <div class="form-group" style="margin:0">
+            <label class="form-label"><i class="ti ti-brand-whatsapp" style="color:#25D366"></i> Numéro WhatsApp</label>
+            <div style="display:flex;align-items:center;gap:.5rem">
+              <input class="form-input" id="ct-wa" placeholder="+225 07 00 00 00 00" style="flex:1"/>
+              <span style="font-size:.75rem;color:var(--muted)">Ex: 2250700000000</span>
+            </div>
+            <div style="font-size:.72rem;color:var(--muted);margin-top:.3rem">Format international sans + (ex: 2250701234567)</div>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label"><i class="ti ti-phone"></i> Téléphone direct</label>
+            <input class="form-input" id="ct-tel" placeholder="+225 07 00 00 00 00"/>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label"><i class="ti ti-mail"></i> Email</label>
+            <input class="form-input" id="ct-email" placeholder="contact@maisonelite.ci"/>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label"><i class="ti ti-map-pin"></i> Adresse / Localisation</label>
+            <input class="form-input" id="ct-adresse" placeholder="Abidjan, Côte d'Ivoire"/>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label"><i class="ti ti-clock"></i> Horaires d'ouverture</label>
+            <input class="form-input" id="ct-horaires" placeholder="Tous les jours — 7h à 21h"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Réseaux sociaux -->
+      <div class="card">
+        <div class="card-header"><span class="card-title"><i class="ti ti-share" style="color:var(--gold)"></i> Réseaux sociaux</span></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:1rem">
+          <div class="form-group" style="margin:0">
+            <label class="form-label"><i class="ti ti-brand-facebook" style="color:#1877F2"></i> Facebook</label>
+            <input class="form-input" id="ct-facebook" placeholder="https://facebook.com/maisonelite"/>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label"><i class="ti ti-brand-instagram" style="color:#E1306C"></i> Instagram</label>
+            <input class="form-input" id="ct-instagram" placeholder="https://instagram.com/maisonelite"/>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label"><i class="ti ti-brand-tiktok" style="color:#010101"></i> TikTok</label>
+            <input class="form-input" id="ct-tiktok" placeholder="https://tiktok.com/@maisonelite"/>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label"><i class="ti ti-brand-linkedin" style="color:#0A66C2"></i> LinkedIn</label>
+            <input class="form-input" id="ct-linkedin" placeholder="https://linkedin.com/company/maisonelite"/>
+          </div>
+          <div class="form-group" style="margin:0">
+            <label class="form-label"><i class="ti ti-brand-whatsapp" style="color:#25D366"></i> Texte CTA WhatsApp</label>
+            <input class="form-input" id="ct-cta" placeholder="Réponse garantie sous 1h sur WhatsApp. Devis gratuit, sans engagement."/>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:1rem;padding:1rem 1.25rem;background:var(--gold-pale);border-radius:10px;border:1px solid rgba(184,150,90,.25);font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:.6rem">
+      <i class="ti ti-info-circle" style="color:var(--gold);font-size:1rem;flex-shrink:0"></i>
+      Ces informations s'affichent automatiquement sur le site public. Cliquez sur <strong>"Sauvegarder"</strong> pour appliquer les changements.
+    </div>
+  </div>
+
 </div><!-- /.main -->
 
 <!-- ══════════════════════════════════════════
@@ -625,7 +704,7 @@
 <!-- ═══ JAVASCRIPT ═══ -->
 <script>
 /* ────── DATA STORE ────── */
-const K = { orders:'me_orders2', wa:'me_wa2', clients:'me_clients2', catalogue:'me_catalogue2', services:'me_services2', kpis:'me_kpis2' };
+const K = { orders:'me_orders2', wa:'me_wa2', clients:'me_clients2', catalogue:'me_catalogue2', services:'me_services2', kpis:'me_kpis2', contact:'me_contact2' };
 const load = (k,d) => { try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d} };
 const save = (k,d) => localStorage.setItem(k, JSON.stringify(d));
 
@@ -691,7 +770,8 @@ function goTo(id, navEl) {
   const titles={
     'vue-ensemble':'Vue d\'ensemble','commandes':'Commandes',
     'messages':'Messages WhatsApp','clients':'Clients',
-    'catalogue':'Catalogue Produits','services':'Services'
+    'catalogue':'Catalogue Produits','services':'Services',
+    'parametres':'Paramètres'
   };
   document.getElementById('pageTitle').textContent = titles[id]||id;
   closeSidebar();
@@ -699,6 +779,7 @@ function goTo(id, navEl) {
   if(id==='services') renderServices();
   if(id==='messages') renderWaFull();
   if(id==='commandes') renderOrders();
+  if(id==='parametres') loadContactForm();
   if(id==='clients') renderClients();
 }
 
@@ -974,6 +1055,46 @@ document.getElementById('hamburgerBtn').addEventListener('click',()=>{
 function closeSidebar(){
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('overlay').style.display='none';
+}
+
+/* ────── PARAMÈTRES CONTACT ────── */
+const defaultContact = {
+  wa:'2250700000000', tel:'+225 07 00 00 00 00', email:'contact@maisonelite.ci',
+  adresse:"Abidjan, Côte d'Ivoire", horaires:'Tous les jours — 7h à 21h',
+  cta:'Réponse garantie sous 1h sur WhatsApp. Devis gratuit, sans engagement.',
+  facebook:'', instagram:'', tiktok:'', linkedin:''
+};
+let contactData = load(K.contact, defaultContact);
+
+function loadContactForm(){
+  const c = contactData;
+  document.getElementById('ct-wa').value        = c.wa        || '';
+  document.getElementById('ct-tel').value       = c.tel       || '';
+  document.getElementById('ct-email').value     = c.email     || '';
+  document.getElementById('ct-adresse').value   = c.adresse   || '';
+  document.getElementById('ct-horaires').value  = c.horaires  || '';
+  document.getElementById('ct-cta').value       = c.cta       || '';
+  document.getElementById('ct-facebook').value  = c.facebook  || '';
+  document.getElementById('ct-instagram').value = c.instagram || '';
+  document.getElementById('ct-tiktok').value    = c.tiktok    || '';
+  document.getElementById('ct-linkedin').value  = c.linkedin  || '';
+}
+
+function saveContact(){
+  contactData = {
+    wa:       document.getElementById('ct-wa').value.trim().replace(/\D/g,''),
+    tel:      document.getElementById('ct-tel').value.trim(),
+    email:    document.getElementById('ct-email').value.trim(),
+    adresse:  document.getElementById('ct-adresse').value.trim(),
+    horaires: document.getElementById('ct-horaires').value.trim(),
+    cta:      document.getElementById('ct-cta').value.trim(),
+    facebook: document.getElementById('ct-facebook').value.trim(),
+    instagram:document.getElementById('ct-instagram').value.trim(),
+    tiktok:   document.getElementById('ct-tiktok').value.trim(),
+    linkedin: document.getElementById('ct-linkedin').value.trim(),
+  };
+  save(K.contact, contactData);
+  toast('Paramètres sauvegardés ! Le site se met à jour automatiquement.');
 }
 
 /* ────── LOGOUT ────── */
