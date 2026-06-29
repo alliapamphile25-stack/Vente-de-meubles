@@ -704,7 +704,7 @@
       <h2 class="section-title">Une gamme complète<br>pour votre intérieur</h2>
       <p class="section-subtitle">Des pièces soigneusement sélectionnées alliant esthétique raffinée et durabilité, à des prix accessibles pour tous.</p>
     </div>
-    <div class="products-grid">
+    <div class="products-grid" id="products-grid">
       <!-- Fauteuils -->
       <article class="product-card reveal">
         <div class="product-img">
@@ -798,7 +798,7 @@
       <h2 class="section-title">Nos services<br>sur mesure</h2>
       <p class="section-subtitle">Deux métiers d'excellence pour transformer votre intérieur et donner une seconde vie à vos meubles.</p>
     </div>
-    <div class="services-wrap">
+    <div class="services-wrap" id="services-wrap">
       <!-- Tapisserie -->
       <div class="service-card reveal">
         <div class="service-icon"><i class="ti ti-needle-thread" aria-hidden="true"></i></div>
@@ -1149,6 +1149,64 @@
       }
     });
   });
+
+  /* --- Sync produits & services depuis le dashboard (localStorage) --- */
+  (function syncFromDashboard() {
+    const iconImg = {
+      'ti-armchair':'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&q=80&auto=format&fit=crop',
+      'ti-bed':'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&q=80&auto=format&fit=crop',
+      'ti-device-tv':'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80&auto=format&fit=crop',
+      'ti-layout-bottombar':'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80&auto=format&fit=crop',
+      'ti-massage':'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80&auto=format&fit=crop',
+      'ti-curtain':'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&auto=format&fit=crop',
+      'ti-tools':'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&q=80&auto=format&fit=crop',
+      'ti-needle-thread':'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&q=80&auto=format&fit=crop',
+    };
+
+    /* PRODUITS */
+    try {
+      const cat = JSON.parse(localStorage.getItem('me_catalogue2'));
+      if (cat && cat.length) {
+        const grid = document.getElementById('products-grid');
+        grid.innerHTML = cat.filter(p => p.dispo !== false).map((p, i) => {
+          const imgSrc = p.img || iconImg[p.icon] || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80&auto=format&fit=crop';
+          const delay = i * 0.08;
+          return `<article class="product-card reveal" style="transition-delay:${delay}s">
+            <div class="product-img">
+              <img src="${imgSrc}" alt="${p.name}" loading="lazy"/>
+              ${p.price ? `<span class="product-tag" style="background:var(--gold)">${p.price}</span>` : ''}
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">${p.name}</h3>
+              <p class="product-desc">${p.desc || p.cat || ''}</p>
+              <a href="https://wa.me/2250700000000?text=${encodeURIComponent('Bonjour, je suis intéressé(e) par : ' + p.name + (p.price ? ' — ' + p.price : '') + '.')}" class="product-link">
+                Commander <i class="ti ti-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </article>`;
+        }).join('');
+      }
+    } catch(e) {}
+
+    /* SERVICES */
+    try {
+      const svcs = JSON.parse(localStorage.getItem('me_services2'));
+      if (svcs && svcs.length) {
+        const wrap = document.getElementById('services-wrap');
+        wrap.innerHTML = svcs.filter(s => s.actif !== false).map((s, i) => `
+          <div class="service-card reveal" style="transition-delay:${i * 0.12}s">
+            <div class="service-icon"><i class="ti ${s.icon}" aria-hidden="true"></i></div>
+            <h3 class="service-name">${s.name}</h3>
+            <p class="service-desc">${s.desc || ''}</p>
+            ${s.price ? `<p style="margin-top:.75rem;font-weight:600;color:var(--gold)">${s.price}</p>` : ''}
+            <br/>
+            <a href="https://wa.me/2250700000000?text=${encodeURIComponent('Bonjour, je souhaite un devis pour : ' + s.name + '.')}" class="btn btn-wa-outline" style="margin-top:.5rem;padding:.6rem 1.25rem;font-size:.82rem;border-radius:4px">
+              Demander un devis
+            </a>
+          </div>`).join('');
+      }
+    } catch(e) {}
+  })();
 
   /* --- Scroll reveal animation --- */
   const revealObserver = new IntersectionObserver((entries) => {
